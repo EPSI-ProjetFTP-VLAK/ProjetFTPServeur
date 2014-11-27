@@ -25,10 +25,13 @@ public class ClientConnection implements Runnable
 
                 System.out.println("Un nouveau client essaye de ce connexter au serveur de fichier ...");
 
-                //TO_DO Implementer l'authentification au SRV
-                Thread authentificationThread = new Thread(new Authentification(socket, xmlParser));
-                authentificationThread.start();
+                Authentification authentificator = new Authentification(socket, xmlParser);
 
+                if(authentificator.isUsernameAndPasswordAreValid()){
+                    System.out.println("Authentification réussi");
+                }else{
+                    System.out.println("Echec de l'authentification");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

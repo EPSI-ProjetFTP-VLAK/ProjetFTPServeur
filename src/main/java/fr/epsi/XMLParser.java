@@ -38,7 +38,7 @@ public class XMLParser {
         return this.usersXMLFile != null;
     }
 
-    public synchronized Map<String, String> parseUsersXMLFile(){
+    public synchronized Map<String, String> parseAndGetUsersXMLFile(){
         Map<String, String> credentials = new HashMap<String, String>();
 
         if(userXMLFileIsValid()){

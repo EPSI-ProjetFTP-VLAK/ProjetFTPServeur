@@ -6,7 +6,7 @@ import java.util.*;
 
 public class MainThread
 {
-    public static int PORT = 4003;
+    public static int PORT = 4000;
 
     public static void main(String[] args)
     {

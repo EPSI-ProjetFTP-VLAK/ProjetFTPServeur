@@ -1,38 +1,43 @@
 package fr.epsi;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
-import java.util.Map;
 
-public class Authentification implements  Runnable{
+public class Authentification {
+    private String dataFromSocket;
     private Socket socket;
     private XMLParser xmlParser;
-    private boolean authentificationIsValid;
 
     public Authentification(Socket acceptationSocket, XMLParser xmlParser){
         this.socket = acceptationSocket;
+        this.dataFromSocket = getDataFromSocket();
         this.xmlParser = xmlParser;
-        this.authentificationIsValid = false;
     }
 
-    @Override
-    public void run() {
-       isUsernameAndPasswordAreValid(xmlParser.parseUsersXMLFile(), getUsernameAndPasswordFromSocket());
+    private String getDataFromSocket(){
+        String dataFromSocket = "";
+
+        try{
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            dataFromSocket = inputReader.readLine();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return dataFromSocket;
     }
 
-    //TO_DO lire les données de la socket et les retourné
-    private String getUsernameAndPasswordFromSocket(){
-        return "";
+    public boolean isUsernameAndPasswordAreValid(){
+        return xmlParser.parseAndGetUsersXMLFile().get(getLoginFromSocketData()).equals(getPasswordFromSocketData());
     }
 
-    //TO_DO regarder si les données de la socket sont dans le ficihier de conf si c'est le cas passer l'attribut a TRUE
-    private void isUsernameAndPasswordAreValid(Map<String, String> usersList, String usernameAndPasswordFromSocket){
-        this.authentificationIsValid = true;
+    private String getPasswordFromSocketData() {
+        return this.dataFromSocket.split(" ")[1];
     }
 
-    public boolean authentificationIsValid(){
-        return this.authentificationIsValid;
+    private String getLoginFromSocketData() {
+        return  this.dataFromSocket.split(" ")[0];
     }
 }
