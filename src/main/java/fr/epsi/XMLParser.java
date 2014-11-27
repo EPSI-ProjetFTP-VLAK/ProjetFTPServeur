@@ -9,21 +9,34 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class XMLParser {
     private URI usersXMLFile;
+    private URI serverXMLFile;
+
     private final String nodeUser = "user";
     private final String attributeUsername = "username";
     private  final  String attributePassword = "password";
 
+    private final String portNode = "port";
+
     public XMLParser() {
         this.usersXMLFile = null;
+        this.serverXMLFile = null;
+
+        setServerXMLFile();
         setUsersXMLFile();
+    }
+
+    private void setServerXMLFile() {
+        try {
+            this.serverXMLFile = getClass().getClassLoader().getResource("server-configuration.xml").toURI();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUsersXMLFile(){
@@ -36,6 +49,32 @@ public class XMLParser {
 
     private boolean userXMLFileIsValid(){
         return this.usersXMLFile != null;
+    }
+
+    private boolean serverXMLFileIsValid(){
+        return this.serverXMLFile != null;
+    }
+
+    public synchronized String serverPort(){
+        String serverPort = "";
+
+        if(serverXMLFileIsValid()){
+            try {
+                File fXmlFile = new File(serverXMLFile);
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(fXmlFile);
+
+                doc.getDocumentElement().normalize();
+                NodeList portNodeList = doc.getElementsByTagName(portNode);
+
+                serverPort = portNodeList.item(0).getTextContent();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return serverPort;
     }
 
     public synchronized Map<String, String> parseAndGetUsersXMLFile(){

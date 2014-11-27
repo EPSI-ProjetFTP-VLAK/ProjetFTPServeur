@@ -6,18 +6,16 @@ import java.util.*;
 
 public class MainThread
 {
-    public static int PORT = 4000;
-
     public static void main(String[] args)
     {
         ServerSocket serverSocket;
-        List<Thread> clientList = new ArrayList<Thread>();
+        XMLParser xmlParser = new XMLParser();
+        int PORT = Integer.parseInt(xmlParser.serverPort());
 
         System.out.println("Démarrage du serveur de fichier...");
         try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Serveur démarré...");
-
 
             Thread connectClientThread = new Thread(new ClientConnection(serverSocket));
             connectClientThread.start();
