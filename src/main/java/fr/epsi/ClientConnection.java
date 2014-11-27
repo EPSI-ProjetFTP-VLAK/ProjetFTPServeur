@@ -29,7 +29,6 @@ public class ClientConnection implements Runnable
                 Thread authentificationThread = new Thread(new Authentification(socket, xmlParser));
                 authentificationThread.start();
 
-                this.socket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

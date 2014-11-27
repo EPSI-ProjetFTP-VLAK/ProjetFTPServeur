@@ -10,6 +10,8 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,10 @@ public class XMLParser {
 
     public XMLParser() {
         this.usersXMLFile = null;
+        setUsersXMLFile();
+    }
+
+    private void setUsersXMLFile(){
         try {
             this.usersXMLFile = getClass().getClassLoader().getResource("users.xml").toURI();
         } catch (URISyntaxException e) {
@@ -28,33 +34,42 @@ public class XMLParser {
         }
     }
 
-    public synchronized void parseUsersXMLFile(){
+    private boolean userXMLFileIsValid(){
+        return this.usersXMLFile != null;
+    }
+
+    public synchronized Map<String, String> parseUsersXMLFile(){
         Map<String, String> credentials = new HashMap<String, String>();
 
-        try {
-            File fXmlFile = new File(usersXMLFile);
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
+        if(userXMLFileIsValid()){
+            try {
+                File fXmlFile = new File(usersXMLFile);
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(fXmlFile);
 
-            doc.getDocumentElement().normalize();
-            NodeList usersNodeList = doc.getElementsByTagName(nodeUser);
+                doc.getDocumentElement().normalize();
+                NodeList usersNodeList = doc.getElementsByTagName(nodeUser);
 
-            for (int i = 0; i < usersNodeList.getLength(); i++){
-                Node userNode = usersNodeList.item(i);
+                for (int i = 0; i < usersNodeList.getLength(); i++){
+                    Node userNode = usersNodeList.item(i);
 
-                if (userNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element userElement = (Element) userNode;
-                    credentials.put(userElement.getAttribute(attributeUsername), userElement.getAttribute(attributePassword));
+                    if (userNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element userElement = (Element) userNode;
+                        credentials.put(userElement.getAttribute(attributeUsername), userElement.getAttribute(attributePassword));
+                    }
+
                 }
-
+            }catch (Exception e) {
+                e.printStackTrace();
             }
-
-            System.out.println(credentials.toString());
-
-        }catch (Exception e) {
-            e.printStackTrace();
         }
+
+        if(credentials == null || credentials.isEmpty()){
+            credentials = Collections.emptyMap();
+        }
+
+        return credentials;
     }
 
 }
