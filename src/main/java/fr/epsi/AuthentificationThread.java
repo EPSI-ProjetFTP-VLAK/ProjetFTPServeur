@@ -5,15 +5,23 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Authentification {
+public class AuthentificationThread implements Runnable{
     private String dataFromSocket;
     private Socket socket;
     private XMLParser xmlParser;
 
-    public Authentification(Socket acceptationSocket, XMLParser xmlParser){
+    public AuthentificationThread(Socket acceptationSocket, XMLParser xmlParser){
         this.socket = acceptationSocket;
         this.dataFromSocket = getDataFromSocket();
         this.xmlParser = xmlParser;
+    }
+
+    public void run(){
+        System.out.println("Tentative d'authentification");
+        if(isUsernameAndPasswordAreValid()){
+            Thread clientThread = new Thread(new ClientThread(getLoginFromSocketData(), socket));
+            clientThread.start();
+        }
     }
 
     private String getDataFromSocket(){

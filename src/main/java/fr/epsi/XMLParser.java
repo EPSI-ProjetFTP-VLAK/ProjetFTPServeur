@@ -22,6 +22,8 @@ public class XMLParser {
     private  final  String attributePassword = "password";
 
     private final String portNode = "port";
+    private final String timeOutNode = "timeout";
+    private final String baseDirectoryNode = "basedirectory";
 
     public XMLParser() {
         this.usersXMLFile = null;
@@ -75,6 +77,50 @@ public class XMLParser {
         }
 
         return serverPort;
+    }
+
+    public synchronized String serverTimeOut(){
+        String timeOut = "";
+
+        if(serverXMLFileIsValid()){
+            try {
+                File fXmlFile = new File(serverXMLFile);
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(fXmlFile);
+
+                doc.getDocumentElement().normalize();
+                NodeList timeOutNodeList = doc.getElementsByTagName(timeOutNode);
+
+                timeOut = timeOutNodeList.item(0).getTextContent();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return timeOut;
+    }
+
+    public synchronized String serverBaseDirectory(){
+        String serverBaseDirectory = "";
+
+        if(serverXMLFileIsValid()){
+            try {
+                File fXmlFile = new File(serverXMLFile);
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(fXmlFile);
+
+                doc.getDocumentElement().normalize();
+                NodeList timeOutNodeList = doc.getElementsByTagName(baseDirectoryNode);
+
+                serverBaseDirectory = timeOutNodeList.item(0).getTextContent();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return serverBaseDirectory;
     }
 
     public synchronized Map<String, String> parseAndGetUsersXMLFile(){
