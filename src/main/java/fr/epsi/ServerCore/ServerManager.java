@@ -12,7 +12,7 @@ public class ServerManager extends Thread{
         isLoaded = false;
     }
 
-    private void loadServer() {
+    public void loadServer() {
         FTPServer = new Server();
         isLoaded = true;
     }
@@ -37,15 +37,19 @@ public class ServerManager extends Thread{
             loadServer();
         }else if(command.toLowerCase().equals("exit")){
             stopServer();
-            keepRunning = false;
+            stopManagerThread();
         }
     }
 
-    private void startServer(){
+    private void stopManagerThread(){
+        keepRunning = false;
+    }
+
+    public void startServer(){
         FTPServer.startServer();
     }
 
-    private void stopServer(){
+    public void stopServer(){
         FTPServer.stopServer();
     }
 }

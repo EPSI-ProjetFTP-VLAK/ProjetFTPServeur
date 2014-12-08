@@ -12,6 +12,9 @@ public class ServerTest {
         simulatedClient.start();
 
         server = new ServerManager();
+        server.loadServer();
+        server.startServer();
+
 
         while(true){
             System.out.print("");

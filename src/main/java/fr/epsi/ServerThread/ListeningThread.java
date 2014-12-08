@@ -23,7 +23,15 @@ public class ListeningThread extends Thread
             launchAuthentificationThread();
             waitOneSecond();
             AbstractLogger.log("Le Thread a fait une itération d'écoute !");
+
+            if(this.isInterrupted() || !this.isAlive()){
+                stopListeningThread();
+            }
         }
+    }
+
+    private void stopListeningThread() {
+       keepListening = false;
     }
 
     private void waitOneSecond() {
