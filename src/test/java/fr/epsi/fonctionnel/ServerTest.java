@@ -1,4 +1,4 @@
-package test.fonctionnel;
+package fr.epsi.fonctionnel;
 
 import fr.epsi.ServerCore.ServerManager;
 import org.junit.Test;
