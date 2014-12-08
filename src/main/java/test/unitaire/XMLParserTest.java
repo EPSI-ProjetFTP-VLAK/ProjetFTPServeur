@@ -1,6 +1,6 @@
-package test;
+package test.unitaire;
 
-import fr.epsi.XMLParser;
+import fr.epsi.Utils.XMLParser;
 
 import org.junit.Before;
 import org.junit.Test;

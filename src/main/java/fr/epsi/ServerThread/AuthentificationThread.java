@@ -1,26 +1,31 @@
-package fr.epsi;
+package fr.epsi.ServerThread;
+
+import fr.epsi.Utils.AbstractLogger;
+import fr.epsi.Utils.XMLParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.Socket;
 
-public class AuthentificationThread implements Runnable{
+public class AuthentificationThread extends Thread{
     private String dataFromSocket;
     private Socket socket;
     private XMLParser xmlParser;
 
-    public AuthentificationThread(Socket acceptationSocket, XMLParser xmlParser){
+    public AuthentificationThread(Socket acceptationSocket){
         this.socket = acceptationSocket;
         this.dataFromSocket = getDataFromSocket();
-        this.xmlParser = xmlParser;
+        this.xmlParser = new XMLParser();
     }
 
     public void run(){
-        System.out.println("Tentative d'authentification");
+        AbstractLogger.log("Tentative d'authentification");
         if(isUsernameAndPasswordAreValid()){
             Thread clientThread = new Thread(new ClientThread(getLoginFromSocketData(), socket));
             clientThread.start();
+        }else{
+            AbstractLogger.log("Echéc de l'authentification !");
         }
     }
 

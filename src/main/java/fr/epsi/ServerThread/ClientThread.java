@@ -1,4 +1,6 @@
-package fr.epsi;
+package fr.epsi.ServerThread;
+
+import fr.epsi.Utils.AbstractLogger;
 
 import java.net.Socket;
 
@@ -15,12 +17,9 @@ public class ClientThread implements Runnable{
 
     public void run(){
         helloImANewClient();
-        while (!stop){
-
-        }
     }
 
     private void helloImANewClient(){
-        System.out.println("Salut je suis un nouveau client authentifiée et mon nom est : " + username);
+        AbstractLogger.log("Salut je suis un nouveau client authentifiée et mon nom est : " + username);
     }
 }
