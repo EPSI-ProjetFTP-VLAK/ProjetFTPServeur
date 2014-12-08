@@ -20,7 +20,7 @@ public class ClientSimulator extends Thread{
 
         this.username = xmlParser.parseAndGetUsersXMLFile().keySet().toArray()[0].toString(); // 1er utilisateur du fichier de configuration du serveur
         this.password = xmlParser.parseAndGetUsersXMLFile().get(this.username);
-        this.serverPort = Integer.parseInt(xmlParser.serverPort());
+        this.serverPort = Integer.parseInt(xmlParser.parseXMLForNode("port"));
         this.host = "127.0.0.1";
     }
 

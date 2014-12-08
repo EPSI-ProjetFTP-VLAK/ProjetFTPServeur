@@ -1,11 +1,12 @@
 package fr.epsi.utils;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,10 +21,6 @@ public class XMLParser {
     private final String nodeUser = "user";
     private final String attributeUsername = "username";
     private  final  String attributePassword = "password";
-
-    private final String portNode = "port";
-    private final String timeOutNode = "timeout";
-    private final String baseDirectoryNode = "basedirectory";
 
     public XMLParser() {
         this.usersXMLFile = null;
@@ -49,16 +46,16 @@ public class XMLParser {
         }
     }
 
-    private boolean userXMLFileIsValid(){
+    private boolean userXMLFileIsValid() {
         return this.usersXMLFile != null;
     }
 
-    private boolean serverXMLFileIsValid(){
+    private boolean serverXMLFileIsValid() {
         return this.serverXMLFile != null;
     }
 
-    public synchronized String serverPort(){
-        String serverPort = "";
+    public synchronized String parseXMLForNode(String node) {
+        String value = null;
 
         if(serverXMLFileIsValid()){
             try {
@@ -68,59 +65,15 @@ public class XMLParser {
                 Document doc = dBuilder.parse(fXmlFile);
 
                 doc.getDocumentElement().normalize();
-                NodeList portNodeList = doc.getElementsByTagName(portNode);
+                NodeList portNodeList = doc.getElementsByTagName(node);
 
-                serverPort = portNodeList.item(0).getTextContent();
+                value = portNodeList.item(0).getTextContent();
             }catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        return serverPort;
-    }
-
-    public synchronized String serverTimeOut(){
-        String timeOut = "";
-
-        if(serverXMLFileIsValid()){
-            try {
-                File fXmlFile = new File(serverXMLFile);
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(fXmlFile);
-
-                doc.getDocumentElement().normalize();
-                NodeList timeOutNodeList = doc.getElementsByTagName(timeOutNode);
-
-                timeOut = timeOutNodeList.item(0).getTextContent();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return timeOut;
-    }
-
-    public synchronized String serverBaseDirectory(){
-        String serverBaseDirectory = "";
-
-        if(serverXMLFileIsValid()){
-            try {
-                File fXmlFile = new File(serverXMLFile);
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(fXmlFile);
-
-                doc.getDocumentElement().normalize();
-                NodeList timeOutNodeList = doc.getElementsByTagName(baseDirectoryNode);
-
-                serverBaseDirectory = timeOutNodeList.item(0).getTextContent();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return serverBaseDirectory;
+        return value;
     }
 
     public synchronized Map<String, String> parseAndGetUsersXMLFile(){

@@ -1,4 +1,8 @@
 language: java
+
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report
+
 notifications:
   email:
     - k2r79@hotmail.fr

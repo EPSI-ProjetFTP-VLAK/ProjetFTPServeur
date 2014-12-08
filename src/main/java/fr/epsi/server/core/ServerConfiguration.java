@@ -22,23 +22,26 @@ public class ServerConfiguration {
 
     private void loadAndDisplayConfiguration() {
         XMLParser xmlParser = new XMLParser();
-        PORT = Integer.parseInt(xmlParser.serverPort());
+
+        PORT = Integer.parseInt(xmlParser.parseXMLForNode("port"));
         AbstractLogger.log("Port d'écoute : " + PORT);
-        TIME_OUT = Integer.parseInt(xmlParser.serverTimeOut());
+
+        TIME_OUT = Integer.parseInt(xmlParser.parseXMLForNode("timeout"));
         AbstractLogger.log("Time out : " + TIME_OUT);
-        BASE_DIRECTORY = xmlParser.serverBaseDirectory();
+
+        BASE_DIRECTORY = xmlParser.parseXMLForNode("basedirectory");
         AbstractLogger.log("Répertoire de base : " + BASE_DIRECTORY);
     }
 
-    public int serverPort(){
+    public int serverPort() {
         return PORT;
     }
 
-    public int serverTimeOut(){
+    public int serverTimeOut() {
         return TIME_OUT;
     }
 
-    public String serverBaseDirectory(){
+    public String serverBaseDirectory() {
         return BASE_DIRECTORY;
     }
 

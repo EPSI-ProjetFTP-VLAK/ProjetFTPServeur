@@ -20,8 +20,8 @@ public class XMLParserTest {
 
     @Test
     public void canParseXMLConfigurationFile() {
-        assertEquals(xmlParser.serverPort(), "4002");
-        assertEquals(xmlParser.serverTimeOut(), "3500");
-        assertEquals(xmlParser.serverBaseDirectory(), "D:/FTPFolder");
+        assertEquals(xmlParser.parseXMLForNode("port"), "4002");
+        assertEquals(xmlParser.parseXMLForNode("timeout"), "3500");
+        assertEquals(xmlParser.parseXMLForNode("basedirectory"), "D:/FTPFolder");
     }
 }
