@@ -36,6 +36,7 @@ public class ServerManager extends Thread{
         }else if(command.toLowerCase().equals("load")){
             loadServer();
         }else if(command.toLowerCase().equals("exit")){
+            stopServer();
             keepRunning = false;
         }
     }
