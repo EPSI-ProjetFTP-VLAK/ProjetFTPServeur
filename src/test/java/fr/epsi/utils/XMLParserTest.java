@@ -1,0 +1,27 @@
+package fr.epsi.utils;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class XMLParserTest {
+    private XMLParser xmlParser;
+
+    @Before
+    public void before() {
+        xmlParser = new XMLParser();
+    }
+
+    @Test
+    public void canParseXMLUserFile() {
+        assertEquals(xmlParser.parseAndGetUsersXMLFile().size(), 1);
+        assertEquals(xmlParser.parseAndGetUsersXMLFile().get("test"), "test");
+    }
+
+    @Test
+    public void canParseXMLConfigurationFile() {
+        assertEquals(xmlParser.serverPort(), "4002");
+        assertEquals(xmlParser.serverTimeOut(), "3500");
+        assertEquals(xmlParser.serverBaseDirectory(), "D:/FTPFolder");
+    }
+}

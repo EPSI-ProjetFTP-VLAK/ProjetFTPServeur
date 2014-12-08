@@ -16,7 +16,7 @@ public class ServerTest {
     public void LeServeurSeLanceUnClientDuFichierSeConnecte() throws InterruptedException {
         // Mock System.out
         logger = System.out;
-        System.setOut(new PrintStream(outContent));
+        //System.setOut(new PrintStream(outContent));
 
         logger.println("Launching server...");
         server = new ServerManager();
