@@ -1,4 +1,4 @@
-package test.unitaire;
+package fr.epsi.unitaire;
 
 import fr.epsi.Utils.XMLParser;
 
