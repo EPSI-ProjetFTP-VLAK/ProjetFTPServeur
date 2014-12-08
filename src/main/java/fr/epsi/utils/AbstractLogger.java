@@ -1,4 +1,4 @@
-package fr.epsi.Utils;
+package fr.epsi.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

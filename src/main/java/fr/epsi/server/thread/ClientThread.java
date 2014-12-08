@@ -1,10 +1,10 @@
-package fr.epsi.ServerThread;
+package fr.epsi.server.thread;
 
-import fr.epsi.Utils.AbstractLogger;
+import fr.epsi.utils.AbstractLogger;
 
 import java.net.Socket;
 
-public class ClientThread implements Runnable{
+public class ClientThread extends Thread {
     private String username;
     private Socket socket;
     private boolean stop;
@@ -15,8 +15,10 @@ public class ClientThread implements Runnable{
         this.stop = false;
     }
 
-    public void run(){
+    public void run() {
         helloImANewClient();
+
+        interrupt();
     }
 
     private void helloImANewClient(){

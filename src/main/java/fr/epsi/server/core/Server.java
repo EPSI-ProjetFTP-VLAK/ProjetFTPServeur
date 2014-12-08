@@ -1,6 +1,6 @@
-package fr.epsi.ServerCore;
-import fr.epsi.ServerThread.ListeningThread;
-import fr.epsi.Utils.AbstractLogger;
+package fr.epsi.server.core;
+import fr.epsi.server.thread.ListeningThread;
+import fr.epsi.utils.AbstractLogger;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,20 +1,18 @@
-package fr.epsi.ServerCore;
+package fr.epsi.server.core;
 
-import fr.epsi.Utils.AbstractLogger;
+import fr.epsi.utils.AbstractLogger;
 
 public class ServerManager extends Thread{
     private Server FTPServer;
     private boolean keepRunning;
-    private boolean isLoaded;
 
     public ServerManager(){
         keepRunning = true;
-        isLoaded = false;
     }
 
     private void loadServer() {
+        System.out.println("Loading Server...");
         FTPServer = new Server();
-        isLoaded = true;
     }
 
     public void run(){
@@ -29,19 +27,19 @@ public class ServerManager extends Thread{
 
     private void resolveManagerCommand(String command) {
         if(command.toLowerCase().equals("start")){
-            if(isLoaded)
-                startServer();
-        }else if(command.toLowerCase().equals("stop")){
+            startServer();
+        } else if (command.toLowerCase().equals("stop")){
             stopServer();
-        }else if(command.toLowerCase().equals("load")){
+        } else if (command.toLowerCase().equals("load")){
             loadServer();
-        }else if(command.toLowerCase().equals("exit")){
+        } else if (command.toLowerCase().equals("exit")){
             stopServer();
             keepRunning = false;
         }
     }
 
-    private void startServer(){
+    public void startServer() {
+        loadServer();
         FTPServer.startServer();
     }
 

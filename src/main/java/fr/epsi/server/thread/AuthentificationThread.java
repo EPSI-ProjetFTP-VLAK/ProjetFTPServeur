@@ -1,7 +1,7 @@
-package fr.epsi.ServerThread;
+package fr.epsi.server.thread;
 
-import fr.epsi.Utils.AbstractLogger;
-import fr.epsi.Utils.XMLParser;
+import fr.epsi.utils.AbstractLogger;
+import fr.epsi.utils.XMLParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -27,6 +27,8 @@ public class AuthentificationThread extends Thread{
         }else{
             AbstractLogger.log("Echéc de l'authentification !");
         }
+
+        interrupt();
     }
 
     private String getDataFromSocket(){

@@ -1,4 +1,4 @@
-package fr.epsi.Utils;
+package fr.epsi.utils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;

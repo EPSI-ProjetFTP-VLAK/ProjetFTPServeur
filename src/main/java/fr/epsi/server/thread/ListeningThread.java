@@ -1,6 +1,6 @@
-package fr.epsi.ServerThread;
+package fr.epsi.server.thread;
 
-import fr.epsi.Utils.AbstractLogger;
+import fr.epsi.utils.AbstractLogger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,23 +21,15 @@ public class ListeningThread extends Thread
         while(keepListening){
             waitingForNewClient();
             launchAuthentificationThread();
-            waitOneSecond();
             AbstractLogger.log("Le Thread a fait une itération d'écoute !");
         }
     }
 
-    private void waitOneSecond() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void launchAuthentificationThread(){
-        AbstractLogger.log("Un nouveau client essaye de ce connexter au serveur de fichier ...");
+        AbstractLogger.log("Un nouveau client essaye de ce connecter au serveur de fichier ...");
         AuthentificationThread authentificatorThread = new AuthentificationThread(socket);
         authentificatorThread.start();
+        interrupt();
     }
 
     private void waitingForNewClient(){

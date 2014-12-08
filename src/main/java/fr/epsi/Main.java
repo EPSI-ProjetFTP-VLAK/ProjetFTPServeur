@@ -1,6 +1,6 @@
 package fr.epsi;
 
-import fr.epsi.ServerCore.ServerManager;
+import fr.epsi.server.core.ServerManager;
 
 public class Main
 {

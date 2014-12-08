@@ -1,6 +1,6 @@
 package fr.epsi.fonctionnel;
 
-import fr.epsi.Utils.XMLParser;
+import fr.epsi.utils.XMLParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,15 +27,8 @@ public class ClientSimulator extends Thread{
     public void run(){
         while(true){
             processConnectionAndAuthentificationForOneClient();
-            waitOneSecond();
-        }
-    }
 
-    private void waitOneSecond() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            interrupt();
         }
     }
 
@@ -47,8 +40,8 @@ public class ClientSimulator extends Thread{
             out.println(this.username + " " + this.password);
             out.flush();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            System.out.println(in.readLine());
+//            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//            System.out.println(in.readLine());
 
             socket.close();
         } catch (IOException e) {

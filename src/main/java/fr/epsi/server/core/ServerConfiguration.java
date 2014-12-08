@@ -1,7 +1,7 @@
-package fr.epsi.ServerCore;
+package fr.epsi.server.core;
 
-import fr.epsi.Utils.AbstractLogger;
-import fr.epsi.Utils.XMLParser;
+import fr.epsi.utils.AbstractLogger;
+import fr.epsi.utils.XMLParser;
 import org.w3c.dom.DOMException;
 
 public class ServerConfiguration {
