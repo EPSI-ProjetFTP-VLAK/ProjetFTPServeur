@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ProjetFTPServeur</name>
+	<name>ftp-serveur</name>
 	<comment/>
 	<projects/>
 	<buildSpec>
