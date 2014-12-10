@@ -1,0 +1,18 @@
+ Le volume dans le lecteur C n'a pas de nom.
+ Le num‚ro de s‚rie du volume est D852-F023
+
+ R‚pertoire de C:\
+
+25/04/2014  07:38    <REP>          25a05852f4eeed026eed3da5f167
+02/06/2014  08:24    <REP>          AdwCleaner
+24/04/2014  15:15    <REP>          dell
+02/05/2014  14:33    <REP>          f496a4f8cf82990ea4cd9f1af6
+07/05/2014  14:03    <REP>          Ora
+24/04/2014  16:31    <REP>          oraclexe
+14/07/2009  04:20    <REP>          PerfLogs
+08/12/2014  16:11    <REP>          Program Files
+10/12/2014  11:43    <REP>          Program Files (x86)
+13/10/2014  13:34    <REP>          Users
+10/12/2014  09:19    <REP>          Windows
+               0 fichier(s)                0 octets
+              11 R‚p(s)  14ÿ889ÿ349ÿ120 octets libres
