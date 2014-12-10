@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public abstract class AbstractLogger {
 
-    public static void log(String stringToDisplay){
+    public synchronized static void log(String stringToDisplay){
         System.out.println(logPrefix() + stringToDisplay);
     }
 

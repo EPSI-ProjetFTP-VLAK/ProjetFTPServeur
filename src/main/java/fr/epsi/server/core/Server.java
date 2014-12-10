@@ -6,26 +6,28 @@ import fr.epsi.utils.AbstractLogger;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class Server extends Thread {
+public class Server {
     private ServerConfiguration serverConfiguration;
     private ServerSocket serverSocket;
     private Thread listeningThread;
 
-    public Server(){
+    public Server() {
         AbstractLogger.log("Initialisation du serveur de fichiers ...");
         serverConfiguration = new ServerConfiguration();
 
-        AbstractLogger.log("Initialisation de la socket d'écoute ...");
         createServerSocket();
 
         listeningThread = new ListeningThread(serverSocket);
     }
 
     public void startServer() {
+        AbstractLogger.log("Démarrage du serveur ...");
         listeningThread.start();
     }
 
     private void createServerSocket() {
+        AbstractLogger.log("Initialisation de la socket d'écoute ...");
+
         try {
             serverSocket = new ServerSocket(serverConfiguration.serverPort());
         } catch (IOException e) {
@@ -34,6 +36,7 @@ public class Server extends Thread {
     }
 
     public void stopServer() {
+        AbstractLogger.log("Arrêt du serveur ...");
         listeningThread.interrupt();
 
         try {
@@ -41,6 +44,8 @@ public class Server extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        AbstractLogger.log("Serveur arrêté ...");
     }
 
     public ServerSocket getServerSocket() {
@@ -49,5 +54,9 @@ public class Server extends Thread {
 
     public Thread getListeningThread() {
         return listeningThread;
+    }
+
+    public void setListeningThread(Thread listeningThread) {
+        this.listeningThread = listeningThread;
     }
 }

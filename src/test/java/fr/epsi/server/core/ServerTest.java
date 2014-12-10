@@ -1,36 +1,42 @@
 package fr.epsi.server.core;
 
+import fr.epsi.server.thread.ListeningThread;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mockito;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.net.ServerSocket;
+
 public class ServerTest extends TestCase {
 
     private Server server;
+    private ServerSocket mockedServerSocket;
+    private ListeningThread mockedListeningThread;
 
     @Before
     public void setUp() throws Exception {
         server = new Server();
+
+        mockedServerSocket = Mockito.mock(ServerSocket.class);
+        mockedListeningThread = Mockito.mock(ListeningThread.class);
     }
 
     @After
     public void tearDown() throws Exception {
         server.stopServer();
 
-        assertFalse(server.getListeningThread().isAlive());
         assertTrue(server.getServerSocket().isClosed());
     }
 
-    @Test
     public void testListensToClients() throws Exception {
-        assertTrue(server.getServerSocket().isBound());
+        assertFalse(server.getServerSocket().isClosed());
 
+        server.setListeningThread(mockedListeningThread);
         server.startServer();
 
-        assertTrue(server.getListeningThread().isAlive());
+        Mockito.verify(mockedListeningThread).start();
+
+        assertFalse(server.getServerSocket().isClosed());
     }
 }
