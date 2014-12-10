@@ -52,10 +52,6 @@ public class Server {
         return serverSocket;
     }
 
-    public Thread getListeningThread() {
-        return listeningThread;
-    }
-
     public void setListeningThread(Thread listeningThread) {
         this.listeningThread = listeningThread;
     }

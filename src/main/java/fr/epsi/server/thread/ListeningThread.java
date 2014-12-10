@@ -19,6 +19,9 @@ public class ListeningThread extends Thread {
 
             try {
                 clientSocket = serverSocket.accept();
+
+                AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
+                authenticationThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
