@@ -18,7 +18,14 @@ public class AuthenticationThread extends Thread {
 
     @Override
     public void run() {
+        if (!clientSocket.isClosed()) {
+            answerToCredentialsRequest(readCredentialsFromSocket());
+        }
+    }
+
+    private String readCredentialsFromSocket() {
         String credentials = "";
+
         try {
             BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(clientSocket.getInputStream()));
             credentials = bufferedReader.readLine();
@@ -26,6 +33,10 @@ public class AuthenticationThread extends Thread {
             e.printStackTrace();
         }
 
+        return credentials;
+    }
+
+    private void answerToCredentialsRequest(String credentials){
         try {
             PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
             clientSocketOutput.println("AUTH : " + (isAuthenticated(credentials) ? "OK" : "NOK"));

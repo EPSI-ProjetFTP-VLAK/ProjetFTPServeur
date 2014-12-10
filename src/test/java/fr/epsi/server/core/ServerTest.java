@@ -1,5 +1,6 @@
 package fr.epsi.server.core;
 
+import fr.epsi.server.client.Client;
 import fr.epsi.server.thread.ListeningThread;
 import junit.framework.TestCase;
 import org.junit.After;
@@ -38,5 +39,13 @@ public class ServerTest extends TestCase {
         Mockito.verify(mockedListeningThread).start();
 
         assertFalse(server.getServerSocket().isClosed());
+    }
+
+    public void testAddClientToList() throws Exception {
+        assertTrue(server.getClients().isEmpty());
+        Client newClient = new Client();
+        server.addClient(newClient);
+        assertEquals(1, server.getClients().size());
+
     }
 }

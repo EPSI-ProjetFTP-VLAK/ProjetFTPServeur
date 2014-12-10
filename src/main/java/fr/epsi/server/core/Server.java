@@ -1,15 +1,19 @@
 package fr.epsi.server.core;
 
+import fr.epsi.server.client.Client;
 import fr.epsi.server.thread.ListeningThread;
 import fr.epsi.utils.AbstractLogger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
     private ServerConfiguration serverConfiguration;
     private ServerSocket serverSocket;
     private Thread listeningThread;
+    private List clients;
 
     public Server() {
         AbstractLogger.log("Initialisation du serveur de fichiers ...");
@@ -18,6 +22,7 @@ public class Server {
         createServerSocket();
 
         listeningThread = new ListeningThread(serverSocket);
+        clients = new ArrayList<Client>();
     }
 
     public void startServer() {
@@ -54,5 +59,13 @@ public class Server {
 
     public void setListeningThread(Thread listeningThread) {
         this.listeningThread = listeningThread;
+    }
+
+    public List getClients() {
+        return clients;
+    }
+
+    public void addClient(Client newClient) {
+        this.clients.add(newClient);
     }
 }

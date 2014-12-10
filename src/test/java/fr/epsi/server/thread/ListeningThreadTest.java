@@ -30,6 +30,7 @@ public class ListeningThreadTest extends TestCase {
     }
 
     public void testAcceptsNewClient() throws Exception {
+        Mockito.doReturn(true).when(mockedClientSocket).isClosed();
         Mockito.when(mockedServerSocket.accept()).thenReturn(mockedClientSocket);
         Mockito.when(mockedServerSocket.isClosed())
                 .thenReturn(false)
