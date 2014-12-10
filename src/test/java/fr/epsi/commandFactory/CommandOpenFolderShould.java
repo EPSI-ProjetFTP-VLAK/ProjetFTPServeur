@@ -12,8 +12,14 @@ public class CommandOpenFolderShould {
 	String path = "/";
 	
 	@Before
-	public void initCommandCD(){
-		command = CommandFactory.callCommand("cd");
+	public void initCommandDir(){
+		TypeCommand command = CommandFactory.callCommand("dir");
+		command.run();
+	}
+	
+	@Test
+	public void openFolderImages(){
+		
 	}
 	
 	

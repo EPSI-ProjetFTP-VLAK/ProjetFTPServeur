@@ -4,17 +4,13 @@ public class CommandFactory {
 
 	public static TypeCommand callCommand(String type) {
 		TypeCommand command = null;
-		
-		switch (type) {
-		case "upload":
-			break;
-		case "download":
-			break;
-		default:
+
+		if (type == "upload") {
+		} else if (type == "download") {
+		} else {
 			command = new WindowsCommand(type);
-			break;
 		}
-		
+
 		return command;
 	}
 }
