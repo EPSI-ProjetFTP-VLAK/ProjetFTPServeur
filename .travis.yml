@@ -9,3 +9,5 @@ notifications:
     - mailys.airouche@gmail.com
     - vermerschth@gmail.com
     - arthur.lambert@epsi.fr
+  on_success: change
+  on_failure: always
