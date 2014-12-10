@@ -10,11 +10,6 @@ public class ServerManager extends Thread{
         keepRunning = true;
     }
 
-    private void loadServer() {
-        System.out.println("Loading Server...");
-        FTPServer = new Server();
-    }
-
     public void run(){
         while(keepRunning){
             String commandManager = AbstractLogger.getConsoleInput();
@@ -38,12 +33,17 @@ public class ServerManager extends Thread{
         }
     }
 
+    private void loadServer() {
+        System.out.println("Loading Server...");
+        FTPServer = new Server();
+    }
+
     public void startServer() {
         loadServer();
         FTPServer.startServer();
     }
 
-    private void stopServer(){
+    private void stopServer() {
         FTPServer.stopServer();
     }
 }

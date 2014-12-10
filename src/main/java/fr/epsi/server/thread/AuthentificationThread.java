@@ -22,8 +22,8 @@ public class AuthentificationThread extends Thread{
     public void run(){
         AbstractLogger.log("Tentative d'authentification");
         if(isUsernameAndPasswordAreValid()){
-            Thread clientThread = new Thread(new ClientThread(getLoginFromSocketData(), socket));
-            clientThread.start();
+            //Thread clientThread = new Thread(new ClientThread(getLoginFromSocketData(), socket));
+            //clientThread.start();
         }else{
             AbstractLogger.log("Echéc de l'authentification !");
         }
