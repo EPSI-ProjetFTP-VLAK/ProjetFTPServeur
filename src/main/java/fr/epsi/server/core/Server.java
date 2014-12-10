@@ -36,5 +36,22 @@ public class Server {
     public void startServer() {
         launchListeningThread();
     }
-    public void stopServer(){ listeningThread.interrupt();}
+
+    public void stopServer() {
+        listeningThread.interrupt();
+
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public Thread getListeningThread() {
+        return listeningThread;
+    }
 }

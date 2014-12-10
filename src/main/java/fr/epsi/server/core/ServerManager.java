@@ -25,7 +25,7 @@ public class ServerManager extends Thread{
         }
     }
 
-    private void resolveManagerCommand(String command) {
+    public void resolveManagerCommand(String command) {
         if(command.toLowerCase().equals("start")){
             startServer();
         } else if (command.toLowerCase().equals("stop")){
