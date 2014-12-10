@@ -6,16 +6,15 @@ import java.io.InputStreamReader;
 
 public class WindowsCommand extends AllCommands implements TypeCommand {
 	
-	private String type;
-
-	public WindowsCommand(String type) {
+	public WindowsCommand(String type, String path) {
 		this.type = type;
+		this.path = path;
 		}
 
 	@Override
 	public void run() {
 		
-		 String command[] = { "cmd.exe", "/c", "dir C:\\Users\\" };
+		 String command[] = { "cmd.exe", "/c", type, path};
 				Process p;
 				try {
 						p = Runtime.getRuntime().exec(command);
@@ -30,5 +29,7 @@ public class WindowsCommand extends AllCommands implements TypeCommand {
 				}   
 	}
 
+	private String type;
+	private String path;
 
 }
