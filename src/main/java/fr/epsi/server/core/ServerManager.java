@@ -3,7 +3,7 @@ package fr.epsi.server.core;
 import fr.epsi.utils.AbstractLogger;
 
 public class ServerManager extends Thread{
-    private Server FTPServer;
+    private static Server FTPServer;
     private boolean keepRunning;
 
     public ServerManager(){
@@ -45,5 +45,9 @@ public class ServerManager extends Thread{
 
     private void stopServer() {
         FTPServer.stopServer();
+    }
+
+    public static Server getFTPServer() {
+        return FTPServer;
     }
 }

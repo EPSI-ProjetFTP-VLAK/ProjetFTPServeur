@@ -46,6 +46,5 @@ public class ServerTest extends TestCase {
         Client newClient = new Client();
         server.addClient(newClient);
         assertEquals(1, server.getClients().size());
-
     }
 }

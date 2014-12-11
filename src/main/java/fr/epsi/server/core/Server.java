@@ -13,7 +13,7 @@ public class Server {
     private ServerConfiguration serverConfiguration;
     private ServerSocket serverSocket;
     private Thread listeningThread;
-    private List clients;
+    private List<Client> clients;
 
     public Server() {
         AbstractLogger.log("Initialisation du serveur de fichiers ...");
@@ -61,11 +61,15 @@ public class Server {
         this.listeningThread = listeningThread;
     }
 
-    public List getClients() {
+    public List<Client> getClients() {
         return clients;
     }
 
-    public void addClient(Client newClient) {
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public synchronized void addClient(Client newClient) {
         this.clients.add(newClient);
     }
 }

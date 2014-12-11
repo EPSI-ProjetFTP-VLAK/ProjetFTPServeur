@@ -1,5 +1,7 @@
 package fr.epsi.server.thread;
 
+import fr.epsi.server.client.Client;
+import fr.epsi.server.core.ServerManager;
 import fr.epsi.utils.XMLParser;
 
 import java.io.BufferedReader;
@@ -19,11 +21,18 @@ public class AuthenticationThread extends Thread {
     @Override
     public void run() {
         if (!clientSocket.isClosed()) {
-            answerToCredentialsRequest(readCredentialsFromSocket());
+            String[] credentials = readCredentialsFromSocket();
+            boolean isAuthenticated = isAuthenticated(credentials);
+
+            if (isAuthenticated) {
+                ServerManager.getFTPServer().addClient(new Client(credentials[0], clientSocket));
+            }
+
+            answerToCredentialsRequest(isAuthenticated);
         }
     }
 
-    private String readCredentialsFromSocket() {
+    private String[] readCredentialsFromSocket() {
         String credentials = "";
 
         try {
@@ -33,23 +42,22 @@ public class AuthenticationThread extends Thread {
             e.printStackTrace();
         }
 
-        return credentials;
+        return credentials.split(" ");
     }
 
-    private void answerToCredentialsRequest(String credentials){
+    private boolean isAuthenticated(String[] credentials) {
+        XMLParser xmlParser = new XMLParser();
+
+        return xmlParser.parseAndGetUsersXMLFile().get(credentials[0]).equals(credentials[1]);
+    }
+
+    private void answerToCredentialsRequest(boolean isAuthenticated){
         try {
             PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
-            clientSocketOutput.println("AUTH : " + (isAuthenticated(credentials) ? "OK" : "NOK"));
+            clientSocketOutput.println("AUTH : " + (isAuthenticated ? "OK" : "NOK"));
             clientSocketOutput.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean isAuthenticated(String credentials) {
-        XMLParser xmlParser = new XMLParser();
-        String[] splittedCredentials = credentials.split(" ");
-
-        return xmlParser.parseAndGetUsersXMLFile().get(splittedCredentials[0]).equals(splittedCredentials[1]);
     }
 }
