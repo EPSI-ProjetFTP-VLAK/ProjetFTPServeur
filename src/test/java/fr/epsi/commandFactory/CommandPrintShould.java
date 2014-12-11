@@ -1,7 +1,6 @@
 package fr.epsi.commandFactory;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 
@@ -9,19 +8,18 @@ public class CommandPrintShould {
 	
 	AllCommands commandManager = new AllCommands();
 	TypeCommand command;
-	String path = "../../src/test/resources/";
+	public static String path = "Z:\\application2014-2015\\ftp-serveur\\src\\test\\resources\\images\\";
 	
 	@Before
 	public void initCommandDir(){
-		TypeCommand command = CommandFactory.callCommand("cd", path);
+		TypeCommand command = CommandFactory.callCommand("dir", path);
 		command.run();
 	}
 	
 	@Test
 	public void printFolderImages(){
-		CommandFactory.callCommand("dir", "");
-		command.run();
-		String[] listFiles={"images","musiques","server-configuration.xml","users.xml"};
+		String[] listFiles={"image1","image2","image3"};
+		
 	}
 	
 	

@@ -3,7 +3,8 @@ package fr.epsi.commandFactory;
 public class AllCommands implements TypeCommand{
 
 	@Override
-	public void run(){
+	public String run(){
+		return null;
 		
 	}
 	
