@@ -48,8 +48,21 @@ public class AuthenticationThread extends Thread {
     private boolean isAuthenticated(String[] credentials) {
         XMLParser xmlParser = new XMLParser();
 
-        return xmlParser.parseAndGetUsersXMLFile().get(credentials[0]).equals(credentials[1]);
+        return xmlParser.parseAndGetUsersXMLFile().get(credentials[0]).equals(credentials[1]) && !clientIsAlreadyConnected(credentials);
     }
+
+    private boolean clientIsAlreadyConnected(String[] credentials){
+        boolean clientAlreadyConnected = false;
+
+        for(Client client : ServerManager.getFTPServer().getClients()){
+            if (client.username().equals(credentials[0])){
+                clientAlreadyConnected = true;
+            }
+        }
+
+        return clientAlreadyConnected;
+    }
+
 
     private void answerToCredentialsRequest(boolean isAuthenticated){
         try {

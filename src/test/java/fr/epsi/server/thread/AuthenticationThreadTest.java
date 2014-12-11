@@ -62,7 +62,7 @@ public class AuthenticationThreadTest extends TestCase {
 
         assertEquals(1, ServerManager.getFTPServer().getClients().size());
 
-        assertEquals("AUTH : OK\n", mockedOutputStream.toString());
+        assertTrue(mockedOutputStream.toString().contains("AUTH : OK"));
     }
 
     public void testAuthenticationError() throws Exception {
@@ -79,6 +79,32 @@ public class AuthenticationThreadTest extends TestCase {
 
         assertEquals(0, ServerManager.getFTPServer().getClients().size());
 
-        assertEquals("AUTH : NOK\n", mockedOutputStream.toString());
+        assertTrue(mockedOutputStream.toString().contains("AUTH : NOK"));
+    }
+
+    public void testDoubleAuthenticationError() throws Exception {
+        InputStream mockedInputStream = new ByteArrayInputStream("test test".getBytes(StandardCharsets.UTF_8));
+        Mockito.doReturn(mockedInputStream).when(mockedClientSocket).getInputStream();
+
+        ByteArrayOutputStream mockedOutputStream = new ByteArrayOutputStream();
+        Mockito.when(mockedClientSocket.getOutputStream()).thenReturn(mockedOutputStream);
+
+        assertEquals(0, ServerManager.getFTPServer().getClients().size());
+
+        authenticationThread.start();
+        authenticationThread.join();
+        authenticationThread.interrupt();
+
+        assertEquals(1, ServerManager.getFTPServer().getClients().size());
+        assertTrue(mockedOutputStream.toString().contains("AUTH : OK"));
+
+        InputStream AnothermockedInputStream = new ByteArrayInputStream("test test".getBytes(StandardCharsets.UTF_8));
+        Mockito.doReturn(AnothermockedInputStream).when(mockedClientSocket).getInputStream();
+        authenticationThread = new AuthenticationThread(mockedClientSocket);
+        authenticationThread.start();
+        authenticationThread.join();
+
+        assertEquals(1, ServerManager.getFTPServer().getClients().size());
+        assertTrue(mockedOutputStream.toString().contains("AUTH : NOK"));
     }
 }

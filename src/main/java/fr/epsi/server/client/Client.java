@@ -17,4 +17,8 @@ public class Client {
         this.socket = socket;
         this.connectionTime = new DateTime();
     }
+
+    public String username(){
+        return this.username;
+    }
 }
