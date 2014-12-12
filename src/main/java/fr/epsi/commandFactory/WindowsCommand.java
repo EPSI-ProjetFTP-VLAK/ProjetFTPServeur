@@ -28,10 +28,7 @@ public class WindowsCommand extends AllCommands implements TypeCommand {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
-				
-				String test = output.toString();
-				FormattedDataFromCommand.formatted(test);
-				return test;
+				return output.toString();
 	}
 
 	private String type;
