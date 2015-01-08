@@ -42,14 +42,12 @@ public class Server {
 
     public void stopServer() {
         AbstractLogger.log("Arrêt du serveur ...");
-        listeningThread.interrupt();
-
         try {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        listeningThread.interrupt();
         AbstractLogger.log("Serveur arrêté ...");
     }
 

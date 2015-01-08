@@ -30,6 +30,8 @@ public class ServerManager extends Thread{
         } else if (command.toLowerCase().equals("exit")){
             stopServer();
             keepRunning = false;
+        }else if(command.toLowerCase().equals("users")){
+            displayClients();
         }
     }
 
@@ -49,5 +51,9 @@ public class ServerManager extends Thread{
 
     public static Server getFTPServer() {
         return FTPServer;
+    }
+
+    public void displayClients(){
+        System.out.println(getFTPServer().getClients().toString());
     }
 }

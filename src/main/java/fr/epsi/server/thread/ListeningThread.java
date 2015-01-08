@@ -15,10 +15,8 @@ public class ListeningThread extends Thread {
     @Override
     public void run() {
         while (!serverSocket.isClosed()) {
-            Socket clientSocket = null;
-
             try {
-                clientSocket = serverSocket.accept();
+                Socket clientSocket = serverSocket.accept();
 
                 AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
                 authenticationThread.start();
