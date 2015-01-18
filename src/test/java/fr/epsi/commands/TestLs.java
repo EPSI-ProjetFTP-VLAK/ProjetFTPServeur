@@ -14,11 +14,10 @@ public class TestLs {
 
         this.command = new Ls();
         this.command.setSourcePath(testEnvironementPath);
-        this.command.execCommand();
     }
 
     @Test
     public void canListAllFilesAndSubFolderFromDirectory(){
-        assertTrue(this.command.getFiles().length == 3);
+        assertTrue(this.command.execCommand() == "");
     }
 }

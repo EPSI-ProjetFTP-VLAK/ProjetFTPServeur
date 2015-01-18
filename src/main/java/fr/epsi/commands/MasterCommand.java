@@ -22,7 +22,7 @@ public class MasterCommand implements ICommand{
     }
 
     @Override
-    public void execCommand() {
-
+    public String execCommand() {
+        return "";
     }
 }

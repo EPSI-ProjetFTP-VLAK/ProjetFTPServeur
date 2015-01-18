@@ -49,7 +49,7 @@ public class ServerManager extends Thread{
         FTPServer.stopServer();
     }
 
-    public static Server getFTPServer() {
+    public static synchronized Server getFTPServer() {
         return FTPServer;
     }
 

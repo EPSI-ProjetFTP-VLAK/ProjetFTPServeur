@@ -1,5 +1,7 @@
 package fr.epsi.server.client;
 
+import fr.epsi.server.core.Server;
+import fr.epsi.server.core.ServerManager;
 import org.joda.time.DateTime;
 
 import java.net.Socket;
@@ -9,7 +11,7 @@ public class Client {
     private String username;
     private Socket socket;
     private DateTime connectionTime;
-    //private Queue<Command> commandQueue;
+    private CommandListenerThread commandListenerThread;
 
     public Client() {
     }
@@ -18,6 +20,8 @@ public class Client {
         this.username = username;
         this.socket = socket;
         this.connectionTime = new DateTime();
+        this.commandListenerThread = new CommandListenerThread(socket);
+        this.commandListenerThread.start();
     }
 
     public String username(){

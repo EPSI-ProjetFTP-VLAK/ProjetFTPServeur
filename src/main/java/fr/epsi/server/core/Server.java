@@ -55,6 +55,10 @@ public class Server {
         return serverSocket;
     }
 
+    public String getServerBaseDirectory(){
+        return serverConfiguration.serverBaseDirectory();
+    }
+
     public void setListeningThread(Thread listeningThread) {
         this.listeningThread = listeningThread;
     }

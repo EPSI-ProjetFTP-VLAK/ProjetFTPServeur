@@ -6,11 +6,7 @@ public class Ls extends MasterCommand{
     private File[] listFiles;
 
     @Override
-    public void execCommand() {
-        listFiles = sourceDirectory().listFiles();
-    }
-
-    public File[] getFiles() {
-        return listFiles;
+    public String execCommand() {
+        return sourceDirectory().listFiles().toString();
     }
 }
