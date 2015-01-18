@@ -22,8 +22,8 @@ public class CommandResolver extends Thread{
 
         while (true){
             if (!commandList.isEmpty() && commandList.size() > 0){
-                result = commandList.get(commandList.size() - 1).execCommand();
-                sendResult(result);
+                commandList.get(commandList.size() - 1).execCommand();
+                sendResult(commandList.get(commandList.size() - 1).result());
                 commandList.remove(commandList.size() - 1);
             }
         }

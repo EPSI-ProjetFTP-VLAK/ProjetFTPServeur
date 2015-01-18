@@ -14,6 +14,8 @@ public class CommandListenerThread extends Thread{
     private CommandFactory factory;
     private CommandResolver commandResolver;
     private boolean stop;
+    public String[] allowedCommands = {"ls"};
+    private int numberOfCommandCatch;
 
     public CommandListenerThread(Socket socket){
         this.clientSocket = socket;
@@ -27,6 +29,7 @@ public class CommandListenerThread extends Thread{
         while(!stop){
             if(isNewCommandCatch()){
                 commandResolver.addCommand(factory.createCommand(readDataFromSocket()));
+                numberOfCommandCatch++;
             }
 
             try {
@@ -37,12 +40,11 @@ public class CommandListenerThread extends Thread{
         }
     }
 
-    private boolean isNewCommandCatch() {
+    private boolean isNewCommandCatch(){
         boolean newCommandCatch = false;
 
-        if(readDataFromSocket() != ""){
+        if(!readDataFromSocket().equals("command-not-allowed"))
             newCommandCatch = true;
-        }
 
         return newCommandCatch;
     }
@@ -57,7 +59,22 @@ public class CommandListenerThread extends Thread{
             e.printStackTrace();
         }
 
+        if(!commandExist(datas.split("-")[0])){
+            datas="command-not-allowed";
+        }
+
         return datas;
+    }
+
+    private boolean commandExist(String commandToCheck){
+        boolean commandExist = false;
+
+        for (String command : allowedCommands){
+            if (command.equals(commandToCheck))
+                commandExist = true;
+        }
+
+        return commandExist;
     }
 
     public List<ICommand> commandList(){
@@ -66,5 +83,9 @@ public class CommandListenerThread extends Thread{
 
     public void stopListener(){
         stop = true;
+    }
+
+    public int numberOfCommandCatch(){
+        return numberOfCommandCatch;
     }
 }

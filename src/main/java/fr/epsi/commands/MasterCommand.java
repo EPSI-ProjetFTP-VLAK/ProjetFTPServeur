@@ -5,9 +5,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MasterCommand implements ICommand{
-    private Path sourcePath;
-    private File sourceDirectory;
+    protected Path sourcePath;
+    protected File sourceDirectory;
 
+    protected final String wordDelimiter = "-";
+
+    @Override
     public void setSourcePath(String path){
         this.sourcePath = Paths.get(path);
         setSourceDirectory();
@@ -22,7 +25,11 @@ public class MasterCommand implements ICommand{
     }
 
     @Override
-    public String execCommand() {
-        return "";
+    public void execCommand() {
+    }
+
+    @Override
+    public String result(){
+        return "unknow-request";
     }
 }

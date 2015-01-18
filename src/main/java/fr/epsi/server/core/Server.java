@@ -26,8 +26,8 @@ public class Server {
     }
 
     public void startServer() {
-        AbstractLogger.log("Démarrage du serveur ...");
         listeningThread.start();
+        AbstractLogger.log("Serveur démmaré ...");
     }
 
     private void createServerSocket() {
