@@ -1,11 +1,13 @@
 package fr.epsi.commands;
 
+import java.net.Socket;
+
 public class CommandFactory {
-    public ICommand createCommand(String commandType){
+    public static ICommand createCommand(String commandType, Socket socket){
         ICommand command = null;
 
-        if(commandType == "ls"){
-            command = new Ls();
+        if(commandType.equals("ls")){
+            command = new Ls(socket);
         }
 
         return command;

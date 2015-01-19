@@ -16,7 +16,7 @@ public class CommandListenerThreadTest{
     @Before
     public void setUp() throws IOException{
         mockedClientSocket = Mockito.mock(Socket.class);
-        String command = "ls-";
+        String command = "ls";
         ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
         Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
@@ -30,6 +30,6 @@ public class CommandListenerThreadTest{
         Thread.sleep(500);
         commandListenerThread.stopListener();
         commandListenerThread.join();
-        assertEquals(0, commandListenerThread.numberOfCommandCatch());
+        assertEquals(1, commandListenerThread.numberOfCommandCatch());
     }
 }

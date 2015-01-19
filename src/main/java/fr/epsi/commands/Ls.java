@@ -1,23 +1,28 @@
 package fr.epsi.commands;
 
-import java.io.File;
+import java.io.*;
+import java.net.Socket;
 
 public class Ls extends MasterCommand{
     private File[] filesList;
-    private final String prefixAnswer = "ls" + wordDelimiter + "answer:";
+    private final String prefixAnswer = "ls:";
     private final String returnCodeForEmptyFolder = "empty" + wordDelimiter + "folder";
 
-    public String formatedFilesListString(){
-        String formatedFilesList = prefixAnswer;
+    public Ls(Socket socket){
+        clientSocket = socket;
+    }
 
-        for(File aFile : this.filesList){
-            formatedFilesList += aFile.toString() + wordDelimiter;
-        }
+    public byte[] serializedFilesList() throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = null;
 
-        if (formatedFilesList.equals(prefixAnswer)){
-            formatedFilesList += returnCodeForEmptyFolder;
-        }
-        return formatedFilesList;
+        out = new ObjectOutputStream(bos);
+        out.writeObject(prefixAnswer);
+        out.writeObject(filesList);
+        byte[] arrayBytes = bos.toByteArray();
+        out.close();
+
+        return arrayBytes;
     }
 
     @Override
@@ -26,9 +31,18 @@ public class Ls extends MasterCommand{
     }
 
     @Override
-    public String result(){
-        return formatedFilesListString();
+    public byte[] result() throws IOException {
+        return serializedFilesList();
     }
 
-
+    @Override
+    public void sendResultToClient(){
+        try {
+            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
+            clientSocketOutput.println(result());
+            clientSocketOutput.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    };
 }

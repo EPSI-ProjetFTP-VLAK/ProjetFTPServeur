@@ -1,9 +1,8 @@
 package fr.epsi.server.client;
 
 import fr.epsi.commands.ICommand;
+import fr.epsi.server.core.ServerManager;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,24 +17,15 @@ public class CommandResolver extends Thread{
     }
 
     public void run(){
-        String result;
-
         while (true){
             if (!commandList.isEmpty() && commandList.size() > 0){
-                commandList.get(commandList.size() - 1).execCommand();
-                sendResult(commandList.get(commandList.size() - 1).result());
-                commandList.remove(commandList.size() - 1);
-            }
-        }
-    }
+                int lastCommandIndex = commandList.size() - 1;
 
-    private void sendResult(String result) {
-        try {
-            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
-            clientSocketOutput.println(result);
-            clientSocketOutput.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+                commandList.get(lastCommandIndex).setSourcePath(ServerManager.getFTPServer().getServerBaseDirectory());
+                commandList.get(lastCommandIndex).execCommand();
+                commandList.get(lastCommandIndex).sendResultToClient();
+                commandList.remove(lastCommandIndex);
+            }
         }
     }
 

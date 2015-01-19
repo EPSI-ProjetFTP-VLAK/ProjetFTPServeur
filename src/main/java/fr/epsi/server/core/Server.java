@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server {
+public class Server extends Thread{
     private ServerConfiguration serverConfiguration;
     private ServerSocket serverSocket;
     private Thread listeningThread;
@@ -25,8 +25,34 @@ public class Server {
         clients = new ArrayList<Client>();
     }
 
+    public void run(){
+        while(true){
+            checkForDisconectedPeers();
+        }
+    }
+
+    public void checkForDisconectedPeers(){
+        for (int i = 0; i < clients.size(); i++){
+            if(!clients.get(i).clientSocket().isConnected()){
+                clients.remove(i);
+            }
+        }
+    }
+
+    public void disconectAllPeers(){
+        try {
+            for (int i = 0; i < clients.size(); i++){
+                clients.get(i).clientSocket().close();
+                clients.remove(i);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void startServer() {
         listeningThread.start();
+        this.start();
         AbstractLogger.log("Serveur démmaré ...");
     }
 
@@ -48,6 +74,8 @@ public class Server {
             e.printStackTrace();
         }
         listeningThread.interrupt();
+        this.interrupt();
+        disconectAllPeers();
         AbstractLogger.log("Serveur arrêté ...");
     }
 

@@ -8,11 +8,13 @@ import org.junit.Before;
 import org.mockito.Mockito;
 
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ServerTest extends TestCase {
 
     private Server server;
     private ServerSocket mockedServerSocket;
+    private Socket mockedClientSocket;
     private ListeningThread mockedListeningThread;
 
     @Before
@@ -20,6 +22,7 @@ public class ServerTest extends TestCase {
         server = new Server();
 
         mockedServerSocket = Mockito.mock(ServerSocket.class);
+        mockedClientSocket = Mockito.mock(Socket.class);
         mockedListeningThread = Mockito.mock(ListeningThread.class);
     }
 
@@ -43,7 +46,7 @@ public class ServerTest extends TestCase {
 
     public void testAddClientToList() throws Exception {
         assertTrue(server.getClients().isEmpty());
-        Client newClient = new Client();
+        Client newClient = new Client("Vive le reggae", mockedClientSocket);
         server.addClient(newClient);
         assertEquals(1, server.getClients().size());
     }

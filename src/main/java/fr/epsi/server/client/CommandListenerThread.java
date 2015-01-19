@@ -11,24 +11,26 @@ import java.util.List;
 
 public class CommandListenerThread extends Thread{
     private Socket clientSocket;
-    private CommandFactory factory;
     private CommandResolver commandResolver;
     private boolean stop;
     public String[] allowedCommands = {"ls"};
     private int numberOfCommandCatch;
 
+    private String dataFromSocket = "";
+
     public CommandListenerThread(Socket socket){
         this.clientSocket = socket;
-        this.factory = new CommandFactory();
         this.stop = false;
         this.commandResolver = new CommandResolver(socket);
-        commandResolver.start();
     }
 
     public void run(){
+        commandResolver.start();
+
         while(!stop){
+            readDataFromSocket();
             if(isNewCommandCatch()){
-                commandResolver.addCommand(factory.createCommand(readDataFromSocket()));
+                commandResolver.addCommand(CommandFactory.createCommand(dataFromSocket, clientSocket));
                 numberOfCommandCatch++;
             }
 
@@ -38,18 +40,20 @@ public class CommandListenerThread extends Thread{
                 e.printStackTrace();
             }
         }
+
+        commandResolver.interrupt();
     }
 
     private boolean isNewCommandCatch(){
         boolean newCommandCatch = false;
 
-        if(!readDataFromSocket().equals("command-not-allowed"))
+        if(!dataFromSocket.equals("command-not-allowed"))
             newCommandCatch = true;
 
         return newCommandCatch;
     }
 
-    private String readDataFromSocket(){
+    private void readDataFromSocket(){
         String datas = "";
 
         try {
@@ -59,11 +63,11 @@ public class CommandListenerThread extends Thread{
             e.printStackTrace();
         }
 
-        if(!commandExist(datas.split("-")[0])){
+        if(!commandExist(datas)){
             datas="command-not-allowed";
         }
 
-        return datas;
+        dataFromSocket = datas;
     }
 
     private boolean commandExist(String commandToCheck){
