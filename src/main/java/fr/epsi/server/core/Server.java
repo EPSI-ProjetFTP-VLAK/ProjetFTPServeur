@@ -34,6 +34,7 @@ public class Server extends Thread{
     public void checkForDisconectedPeers(){
         for (int i = 0; i < clients.size(); i++){
             if(!clients.get(i).clientSocket().isConnected()){
+                AbstractLogger.log("Connexion perdu avec le client : " + clients.get(i).username());
                 clients.remove(i);
             }
         }
