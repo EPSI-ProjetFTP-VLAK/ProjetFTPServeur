@@ -17,7 +17,7 @@ public class TestLs {
 
     @Before
     public void setup() throws IOException {
-        String testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+        String testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
         mockedClientSocket = Mockito.mock(Socket.class);
         String command = "ls";
         ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
