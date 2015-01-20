@@ -1,5 +1,6 @@
 package fr.epsi.server.client;
 
+import fr.epsi.commands.CommandData;
 import fr.epsi.commands.CommandFactory;
 import fr.epsi.commands.ICommand;
 
@@ -13,15 +14,15 @@ public class CommandListenerThread extends Thread{
     private Socket clientSocket;
     private CommandResolver commandResolver;
     private boolean stop;
-    public String[] allowedCommands = {"ls"};
     private int numberOfCommandCatch;
 
-    private String dataFromSocket = "";
+    private CommandData commandToCheck;
 
     public CommandListenerThread(Socket socket){
         this.clientSocket = socket;
         this.stop = false;
         this.commandResolver = new CommandResolver(socket);
+        this.numberOfCommandCatch = 0;
     }
 
     public void run(){
@@ -29,9 +30,11 @@ public class CommandListenerThread extends Thread{
 
         while(!stop){
             readDataFromSocket();
+
             if(isNewCommandCatch()){
-                commandResolver.addCommand(CommandFactory.createCommand(dataFromSocket, clientSocket));
                 numberOfCommandCatch++;
+                commandResolver.addCommand(CommandFactory.createCommand(commandToCheck));
+                commandToCheck = new CommandData("empty", clientSocket);
             }
 
             try {
@@ -47,13 +50,15 @@ public class CommandListenerThread extends Thread{
     private boolean isNewCommandCatch(){
         boolean newCommandCatch = false;
 
-        if(!dataFromSocket.equals("command-not-allowed"))
+        if(commandToCheck.commandExist())
             newCommandCatch = true;
 
         return newCommandCatch;
     }
 
     private void readDataFromSocket(){
+        /* TO_DO léve des exceptions non fatal tout le temps !! */
+
         String datas = "";
 
         try {
@@ -63,22 +68,7 @@ public class CommandListenerThread extends Thread{
             e.printStackTrace();
         }
 
-        if(!commandExist(datas)){
-            datas="command-not-allowed";
-        }
-
-        dataFromSocket = datas;
-    }
-
-    private boolean commandExist(String commandToCheck){
-        boolean commandExist = false;
-
-        for (String command : allowedCommands){
-            if (command.equals(commandToCheck))
-                commandExist = true;
-        }
-
-        return commandExist;
+        commandToCheck = new CommandData(datas, clientSocket);
     }
 
     public List<ICommand> commandList(){

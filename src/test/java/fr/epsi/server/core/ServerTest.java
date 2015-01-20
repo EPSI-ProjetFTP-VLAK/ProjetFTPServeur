@@ -5,21 +5,31 @@ import fr.epsi.server.thread.ListeningThread;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ServerManager.class)
 public class ServerTest extends TestCase {
 
     private Server server;
     private ServerSocket mockedServerSocket;
     private Socket mockedClientSocket;
     private ListeningThread mockedListeningThread;
+    private static ServerManager mockedServerManager;
 
     @Before
     public void setUp() throws Exception {
         server = new Server();
+
+        PowerMockito.mockStatic(ServerManager.class);
+        PowerMockito.when(ServerManager.getFTPServer()).thenReturn(server);
 
         mockedServerSocket = Mockito.mock(ServerSocket.class);
         mockedClientSocket = Mockito.mock(Socket.class);
@@ -29,7 +39,6 @@ public class ServerTest extends TestCase {
     @After
     public void tearDown() throws Exception {
         server.stopServer();
-
         assertTrue(server.getServerSocket().isClosed());
     }
 
@@ -46,7 +55,7 @@ public class ServerTest extends TestCase {
 
     public void testAddClientToList() throws Exception {
         assertTrue(server.getClients().isEmpty());
-        Client newClient = new Client("Vive le reggae", mockedClientSocket);
+        Client newClient = new Client("Vive Reggae", mockedClientSocket);
         server.addClient(newClient);
         assertEquals(1, server.getClients().size());
     }

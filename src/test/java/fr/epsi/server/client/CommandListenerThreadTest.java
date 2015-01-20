@@ -1,35 +1,41 @@
 package fr.epsi.server.client;
 
+import fr.epsi.commands.CommandData;
+import fr.epsi.server.thread.AuthenticationThread;
 import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class CommandListenerThreadTest{
     private CommandListenerThread commandListenerThread;
     private Socket mockedClientSocket;
 
     @Before
-    public void setUp() throws IOException{
+    public void setUp() throws IOException {
         mockedClientSocket = Mockito.mock(Socket.class);
-        String command = "ls";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
-        Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
-        Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
+
+        InputStream InputStream = new ByteArrayInputStream("ls-".getBytes(StandardCharsets.UTF_8));
+        OutputStream mockedOutputStream = new ByteArrayOutputStream();
+
+        Mockito.doReturn(InputStream).when(mockedClientSocket).getInputStream();
+        Mockito.doReturn(mockedOutputStream).when(mockedClientSocket).getOutputStream();
 
         commandListenerThread = new CommandListenerThread(mockedClientSocket);
-        commandListenerThread.start();
     }
 
     @Test
     public void canInterceptCommand() throws InterruptedException {
-        Thread.sleep(500);
-        commandListenerThread.stopListener();
+        assertEquals(0, commandListenerThread.numberOfCommandCatch());
+
+        commandListenerThread.start();
         commandListenerThread.join();
+        commandListenerThread.stopListener();
+
         assertEquals(1, commandListenerThread.numberOfCommandCatch());
     }
 }

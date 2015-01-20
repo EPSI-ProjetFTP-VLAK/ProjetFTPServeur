@@ -5,17 +5,15 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import static org.junit.Assert.*;
 
 public class TestLs {
     private ICommand command;
     private Socket mockedClientSocket;
+    private CommandData mockedCommandData;
 
     @Before
     public void setup() throws IOException {
@@ -26,7 +24,9 @@ public class TestLs {
         Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-        this.command = new Ls(mockedClientSocket);
+        mockedCommandData = new CommandData("ls-", mockedClientSocket);
+
+        this.command = new Ls(mockedCommandData);
         this.command.setSourcePath(testEnvironementPath);
     }
 

@@ -1,11 +1,15 @@
-package fr.epsi.commands;
+/*package fr.epsi.commands;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
@@ -30,3 +34,4 @@ public class TestMkdir {
 	 }
 
 }
+*/

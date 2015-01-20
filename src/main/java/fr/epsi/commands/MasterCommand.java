@@ -9,8 +9,12 @@ public class MasterCommand implements ICommand{
     protected Path sourcePath;
     protected File sourceDirectory;
     protected Socket clientSocket;
+    protected CommandData commandData;
 
-    protected final String wordDelimiter = "-";
+    public MasterCommand(CommandData p_commandData){
+        this.clientSocket = p_commandData.clientSocket();
+        this.commandData = p_commandData;
+    }
 
     @Override
     public void setSourcePath(String path){
@@ -24,6 +28,10 @@ public class MasterCommand implements ICommand{
 
     public File sourceDirectory(){
         return sourceDirectory;
+    }
+
+    public Socket clientSocket(){
+        return clientSocket;
     }
 
     @Override
@@ -45,6 +53,12 @@ public class MasterCommand implements ICommand{
 
     @Override
     public void sendResultToClient(){
-
+        try {
+            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
+            clientSocketOutput.println(result());
+            clientSocketOutput.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     };
 }

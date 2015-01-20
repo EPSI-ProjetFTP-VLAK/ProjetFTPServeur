@@ -11,6 +11,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import javax.naming.ldap.SortKey;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -27,20 +28,23 @@ public class AuthenticationThreadTest extends TestCase {
     private Server mockedServer;
     private List<Client> mockedClients;
     private Socket mockedClientSocket;
+    private static ServerManager mockedServerManager;
 
     @Before
     public void setUp() throws Exception {
         mockedClients = new ArrayList<Client>();
 
         mockedServer = Mockito.spy(new Server());
+
+        mockedClientSocket = Mockito.mock(Socket.class);
         mockedServer.setClients(mockedClients);
 
         PowerMockito.mockStatic(ServerManager.class);
         PowerMockito.when(ServerManager.getFTPServer()).thenReturn(mockedServer);
 
-        mockedClientSocket = Mockito.mock(Socket.class);
-
         authenticationThread = new AuthenticationThread(mockedClientSocket);
+
+        mockedServerManager = Mockito.mock(ServerManager.class);
     }
 
     @Override
@@ -98,13 +102,19 @@ public class AuthenticationThreadTest extends TestCase {
         assertEquals(1, ServerManager.getFTPServer().getClients().size());
         assertTrue(mockedOutputStream.toString().contains("AUTH : OK"));
 
+        Socket anotherMockedSocket = Mockito.mock(Socket.class);
         InputStream AnothermockedInputStream = new ByteArrayInputStream("test test".getBytes(StandardCharsets.UTF_8));
-        Mockito.doReturn(AnothermockedInputStream).when(mockedClientSocket).getInputStream();
-        authenticationThread = new AuthenticationThread(mockedClientSocket);
+        Mockito.doReturn(AnothermockedInputStream).when(anotherMockedSocket).getInputStream();
+        authenticationThread = new AuthenticationThread(anotherMockedSocket);
+        ByteArrayOutputStream anotherMockedOutputStream = new ByteArrayOutputStream();
+        Mockito.when(anotherMockedSocket.getOutputStream()).thenReturn(anotherMockedOutputStream);
+
+
         authenticationThread.start();
         authenticationThread.join();
+        authenticationThread.interrupt();
 
         assertEquals(1, ServerManager.getFTPServer().getClients().size());
-        assertTrue(mockedOutputStream.toString().contains("AUTH : NOK"));
+        assertTrue(anotherMockedOutputStream.toString().contains("AUTH : NOK"));
     }
 }

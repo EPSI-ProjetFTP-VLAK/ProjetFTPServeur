@@ -1,15 +1,13 @@
 package fr.epsi.commands;
 
 import java.io.*;
-import java.net.Socket;
 
 public class Ls extends MasterCommand{
     private File[] filesList;
     private final String prefixAnswer = "ls:";
-    private final String returnCodeForEmptyFolder = "empty" + wordDelimiter + "folder";
 
-    public Ls(Socket socket){
-        clientSocket = socket;
+    public Ls(CommandData p_commandData){
+        super(p_commandData);
     }
 
     public byte[] serializedFilesList() throws IOException {
@@ -34,15 +32,4 @@ public class Ls extends MasterCommand{
     public byte[] result() throws IOException {
         return serializedFilesList();
     }
-
-    @Override
-    public void sendResultToClient(){
-        try {
-            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
-            clientSocketOutput.println(result());
-            clientSocketOutput.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    };
 }
