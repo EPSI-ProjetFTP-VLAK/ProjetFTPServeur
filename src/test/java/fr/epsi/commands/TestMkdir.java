@@ -1,37 +1,48 @@
-/*package fr.epsi.commands;
+package fr.epsi.commands;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
 public class TestMkdir {
-	
 	private Mkdir command;
-	 @Before
-	    public void setup() throws URISyntaxException{
+	private Socket mockedClientSocket;
+	private CommandData mockedCommandData;
 
-		 	URL testEnvironnementFolderURL =  this.getClass().getClassLoader().getResource("EnvTest");
-	        File testEnironnementFolder = new File(testEnvironnementFolderURL.toURI());
-	        String testEnvironnementPath = testEnironnementFolder.toString();
-	        
-	        this.command = new Mkdir();
-	        this.command.setSourcePath(testEnvironnementPath+"\\titi");
-	    }
-	 
-	 @Test
-	 public void createDirectory(){
-		 this.command.execCommand();
-		 assertTrue(this.command.getFile());
-	 }
+	@Before
+	public void setup() throws IOException {
+		String testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
 
+		mockedClientSocket = Mockito.mock(Socket.class);
+		String command = "mkdir::--::test/";
+		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
+		Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
+		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
+
+		mockedCommandData = new CommandData("mkdir::--::test/", testEnvironementPath,  mockedClientSocket);
+
+		this.command = new Mkdir(mockedCommandData);
+	}
+
+	@After
+	public void tearDown(){
+		String fileToDelete = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6) + "/test";
+		File file = new File(fileToDelete);
+		file.delete();
+	}
+
+	@Test
+	public void canCreateADirectory() throws IOException {
+		assertTrue(!this.command.getFile());
+		this.command.execCommand();
+		assertTrue(this.command.getFile());
+	}
 }
-*/

@@ -3,6 +3,7 @@ package fr.epsi.server.client;
 import fr.epsi.commands.CommandData;
 import fr.epsi.commands.CommandFactory;
 import fr.epsi.commands.ICommand;
+import fr.epsi.server.core.ServerManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,14 +16,15 @@ public class CommandListenerThread extends Thread{
     private CommandResolver commandResolver;
     private boolean stop;
     private int numberOfCommandCatch;
-
+    private String locationOfTheClientOnTheServer;
     private CommandData commandToCheck;
 
-    public CommandListenerThread(Socket socket){
+    public CommandListenerThread(Socket socket, String locationOfTheClientOnTheServer){
         this.clientSocket = socket;
         this.stop = false;
-        this.commandResolver = new CommandResolver(socket);
+        this.commandResolver = new CommandResolver();
         this.numberOfCommandCatch = 0;
+        this.locationOfTheClientOnTheServer = locationOfTheClientOnTheServer;
     }
 
     public void run(){
@@ -34,7 +36,7 @@ public class CommandListenerThread extends Thread{
             if(isNewCommandCatch()){
                 numberOfCommandCatch++;
                 commandResolver.addCommand(CommandFactory.createCommand(commandToCheck));
-                commandToCheck = new CommandData("empty", clientSocket);
+                this.locationOfTheClientOnTheServer = commandResolver.getLocationOfTheClientOnTheServerAfterCommandExecution();
             }
 
             try {
@@ -68,7 +70,7 @@ public class CommandListenerThread extends Thread{
             e.printStackTrace();
         }
 
-        commandToCheck = new CommandData(datas, clientSocket);
+        commandToCheck = new CommandData(datas, this.locationOfTheClientOnTheServer, clientSocket);
     }
 
     public List<ICommand> commandList(){

@@ -1,7 +1,5 @@
 package fr.epsi.server.client;
 
-import fr.epsi.commands.CommandData;
-import fr.epsi.server.thread.AuthenticationThread;
 import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -19,13 +17,13 @@ public class CommandListenerThreadTest{
     public void setUp() throws IOException {
         mockedClientSocket = Mockito.mock(Socket.class);
 
-        InputStream InputStream = new ByteArrayInputStream("ls-".getBytes(StandardCharsets.UTF_8));
+        InputStream InputStream = new ByteArrayInputStream("ls::--::".getBytes(StandardCharsets.UTF_8));
         OutputStream mockedOutputStream = new ByteArrayOutputStream();
 
         Mockito.doReturn(InputStream).when(mockedClientSocket).getInputStream();
         Mockito.doReturn(mockedOutputStream).when(mockedClientSocket).getOutputStream();
 
-        commandListenerThread = new CommandListenerThread(mockedClientSocket);
+        commandListenerThread = new CommandListenerThread(mockedClientSocket, "D:/FTPFolder");
     }
 
     @Test
@@ -37,5 +35,19 @@ public class CommandListenerThreadTest{
         commandListenerThread.stopListener();
 
         assertEquals(1, commandListenerThread.numberOfCommandCatch());
+    }
+
+    @Test
+    public void dontInterceptMalformedCommand() throws InterruptedException, IOException {
+        InputStream InputStream = new ByteArrayInputStream("suce moi le bout !!".getBytes(StandardCharsets.UTF_8));
+        Mockito.doReturn(InputStream).when(mockedClientSocket).getInputStream();
+
+        assertEquals(0, commandListenerThread.numberOfCommandCatch());
+
+        commandListenerThread.start();
+        commandListenerThread.join();
+        commandListenerThread.stopListener();
+
+        assertEquals(0, commandListenerThread.numberOfCommandCatch());
     }
 }

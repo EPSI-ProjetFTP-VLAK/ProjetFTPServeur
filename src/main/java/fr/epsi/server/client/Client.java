@@ -15,9 +15,10 @@ public class Client {
         this.username = username;
         this.socket = socket;
         this.connectionTime = new DateTime();
-        this.commandListenerThread = new CommandListenerThread(socket);
-        this.commandListenerThread.start();
+
         this.locationOnTheServer = ServerManager.getFTPServer().getServerBaseDirectory();
+        this.commandListenerThread = new CommandListenerThread(socket, locationOnTheServer);
+        this.commandListenerThread.start();
     }
 
     public String locationOnTheServer() { return this.locationOnTheServer; }

@@ -7,31 +7,49 @@ import java.nio.file.Paths;
 
 public class MasterCommand implements ICommand{
     protected Path sourcePath;
+    protected Path destinationPath;
+
     protected File sourceDirectory;
+    protected File destinationDirectory;
+
     protected Socket clientSocket;
+
     protected CommandData commandData;
+    protected String parameter;
 
     public MasterCommand(CommandData p_commandData){
         this.clientSocket = p_commandData.clientSocket();
         this.commandData = p_commandData;
+
+        setSourcePath(p_commandData.locationOfTheClientOnTheServer());
+        setDesinationPath(p_commandData.locationOfTheClientOnTheServer() + "/" + p_commandData.commandParameter());
     }
 
     @Override
-    public void setSourcePath(String path){
+    public CommandData commandData(){
+        return this.commandData;
+    }
+
+    @Override
+     public void setSourcePath(String path){
         this.sourcePath = Paths.get(path);
         setSourceDirectory();
     }
 
-    public void setSourceDirectory(){
-      sourceDirectory = new File(sourcePath.toString());
+    @Override
+    public String clientLocationAfterCommandExectution(){
+        return commandData.locationOfTheClientOnTheServer();
     }
 
-    public File sourceDirectory(){
-        return sourceDirectory;
+    @Override
+    public void setDesinationPath(String destinationPath){
+        this.destinationPath = Paths.get(destinationPath);
+        setDestinationDirectory();
     }
 
-    public Socket clientSocket(){
-        return clientSocket;
+    @Override
+    public void setParameters(){
+        parameter = this.commandData.commandParameter();
     }
 
     @Override
@@ -60,5 +78,21 @@ public class MasterCommand implements ICommand{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    };
+    }
+
+    public void setSourceDirectory(){
+        sourceDirectory = new File(sourcePath.toString());
+    }
+
+    public void setDestinationDirectory(){
+        destinationDirectory = new File(destinationPath.toString());
+    }
+
+    public File sourceDirectory(){
+        return sourceDirectory;
+    }
+
+    public Socket clientSocket(){
+        return clientSocket;
+    }
 }

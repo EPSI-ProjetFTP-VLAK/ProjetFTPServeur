@@ -1,7 +1,5 @@
 package fr.epsi.commands;
 
-import java.net.Socket;
-
 public class Mkdir extends MasterCommand {
 	
 	private boolean createDirectory = false;
@@ -12,8 +10,8 @@ public class Mkdir extends MasterCommand {
 
 	 @Override
     public void execCommand(){
-		if(!sourceDirectory().exists())
-			 this.createDirectory = sourceDirectory().mkdir();
+		if(!destinationDirectory.exists())
+			 this.createDirectory = destinationDirectory.mkdir();
 	 }
 	 
 	 public boolean getFile(){

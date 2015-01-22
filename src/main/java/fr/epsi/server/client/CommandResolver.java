@@ -9,11 +9,10 @@ import java.util.List;
 
 public class CommandResolver extends Thread{
     private List<ICommand> commandList;
-    private Socket clientSocket;
+    private String locationOfTheClientOnTheServer;
 
-    public CommandResolver(Socket socket){
+    public CommandResolver(){
         this.commandList = new ArrayList<ICommand>();
-        this.clientSocket = socket;
     }
 
     public void run(){
@@ -21,8 +20,11 @@ public class CommandResolver extends Thread{
             if (!commandList.isEmpty() && commandList.size() > 0){
                 int lastCommandIndex = commandList.size() - 1;
 
-                commandList.get(lastCommandIndex).setSourcePath(ServerManager.getFTPServer().getServerBaseDirectory());
+                commandList.get(lastCommandIndex).setParameters();
+                commandList.get(lastCommandIndex).setSourcePath(commandList.get(lastCommandIndex).commandData().locationOfTheClientOnTheServer());
+                commandList.get(lastCommandIndex).setDesinationPath(commandList.get(lastCommandIndex).commandData().commandParameter());
                 commandList.get(lastCommandIndex).execCommand();
+                locationOfTheClientOnTheServer = commandList.get(lastCommandIndex).clientLocationAfterCommandExectution();
                 commandList.get(lastCommandIndex).sendResultToClient();
                 commandList.remove(lastCommandIndex);
             }
@@ -35,5 +37,9 @@ public class CommandResolver extends Thread{
 
     public List<ICommand> commandList(){
         return commandList;
+    }
+
+    public String getLocationOfTheClientOnTheServerAfterCommandExecution() {
+        return locationOfTheClientOnTheServer;
     }
 }
