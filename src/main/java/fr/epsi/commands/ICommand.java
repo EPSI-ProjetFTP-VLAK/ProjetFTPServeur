@@ -10,8 +10,8 @@ public interface ICommand {
     public void setDesinationPath(String sourcePath);
     public void setSourcePath(String sourcePath);
 
-    public Object result() throws IOException;
-    public void sendResultToClient();
+    public Object result();
+    public void sendResultToClient() throws IOException;
 
 
     public String clientLocationAfterCommandExectution();

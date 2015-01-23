@@ -55,7 +55,7 @@ public class ServerTest extends TestCase {
 
     public void testAddClientToList() throws Exception {
         assertTrue(server.getClients().isEmpty());
-        Client newClient = new Client("Vive Reggae", mockedClientSocket);
+        Client newClient = new Client("New Client", mockedClientSocket);
         server.addClient(newClient);
         assertEquals(1, server.getClients().size());
     }

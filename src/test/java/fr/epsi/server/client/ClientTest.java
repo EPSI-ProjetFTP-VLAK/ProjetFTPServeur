@@ -27,6 +27,7 @@ public class ClientTest {
         mockedServer = Mockito.mock(Server.class);
         Mockito.when(mockedServer.getServerBaseDirectory()).thenReturn("D:/FTPServer");
 
+
         mockedClientSocket = Mockito.mock(Socket.class);
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 

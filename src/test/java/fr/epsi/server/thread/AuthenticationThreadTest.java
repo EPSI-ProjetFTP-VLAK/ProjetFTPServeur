@@ -49,7 +49,7 @@ public class AuthenticationThreadTest extends TestCase {
 
     @Override
     public void tearDown() throws Exception {
-        mockedServer.stopServer();
+        //mockedServer.stopServer();
     }
 
     public void testAuthenticationSuccess() throws Exception {

@@ -3,27 +3,27 @@ package fr.epsi.commands;
 import java.net.Socket;
 
 public class CommandData {
-    private final String[] allowedCommands = {"ls", "mkdir"};
+    private final String[] allowedCommands = {"ls", "mkdir", "rm", "mv", "copy"};
     private final String parameterDelimiter = "::--::";
     private String defaultCommandType = "command not allowed" + parameterDelimiter;
     private String defaultParameter = "";
 
     private String commandType;
-    private String commandParameter;
+    private String firstCommandParameter;
     private Socket clientSocket;
     private String locationOfTheClientOnTheServer;
 
     public CommandData(String command, String locationOfTheClientOnTheServer, Socket socket){
-        if (command == null){
+        if (command == null || command.isEmpty()){
             setDefaultParameters();
         }
 
         if(command.contains(parameterDelimiter)){
             this.commandType = command.split(parameterDelimiter)[0];
-            this.commandParameter = command.substring(commandType.length() + parameterDelimiter.length());
+            this.firstCommandParameter = command.substring(commandType.length() + parameterDelimiter.length());
         }else{
             this.commandType = defaultCommandType;
-            this.commandParameter = defaultParameter;
+            this.firstCommandParameter = defaultParameter;
         }
 
         if (!commandExist()){
@@ -36,7 +36,7 @@ public class CommandData {
 
     private void setDefaultParameters(){
         this.commandType = defaultCommandType;
-        this.commandParameter = defaultParameter;
+        this.firstCommandParameter = defaultParameter;
     }
 
     public Socket clientSocket(){
@@ -48,7 +48,7 @@ public class CommandData {
     }
 
     public String commandParameter(){
-        return commandParameter;
+        return firstCommandParameter;
     }
 
     public String locationOfTheClientOnTheServer(){ return locationOfTheClientOnTheServer; }

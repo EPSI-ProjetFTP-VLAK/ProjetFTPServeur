@@ -12,7 +12,7 @@ public class ServerConfigurationTest extends TestCase {
     }
 
     public void testConfigurationLoading() throws Exception {
-        assertEquals(this.serverConfiguration.serverPort(), 4010);
+        assertEquals(this.serverConfiguration.serverPort(), 4100);
         assertEquals(this.serverConfiguration.serverTimeOut(), 3500);
         assertEquals(this.serverConfiguration.serverBaseDirectory(), "D:/FTPFolder");
     }

@@ -39,14 +39,15 @@ public class CommandListenerThreadTest{
 
     @Test
     public void dontInterceptMalformedCommand() throws InterruptedException, IOException {
-        InputStream InputStream = new ByteArrayInputStream("suce moi le bout !!".getBytes(StandardCharsets.UTF_8));
+        InputStream InputStream = new ByteArrayInputStream("i'm a fake ::--:: command !".getBytes(StandardCharsets.UTF_8));
         Mockito.doReturn(InputStream).when(mockedClientSocket).getInputStream();
 
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.start();
-        commandListenerThread.join();
         commandListenerThread.stopListener();
+        commandListenerThread.join();
+        commandListenerThread.interrupt();
 
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
     }

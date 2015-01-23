@@ -17,7 +17,16 @@ public class TestLs {
 
     @Before
     public void setup() throws IOException {
-        String testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
+        String os = System.getProperty("os.name");
+        System.out.println(os);
+        String testEnvironementPath = "";
+
+        if(os.contains("Windows")){
+            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+        }else{
+            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
+        }
+
 
         mockedClientSocket = Mockito.mock(Socket.class);
         String command = "ls::--::";

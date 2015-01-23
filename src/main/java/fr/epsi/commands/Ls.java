@@ -10,26 +10,27 @@ public class Ls extends MasterCommand{
         super(p_commandData);
     }
 
-    public byte[] serializedFilesList() throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = null;
-
-        out = new ObjectOutputStream(bos);
-        out.writeObject(prefixAnswer);
-        out.writeObject(filesList);
-        byte[] arrayBytes = bos.toByteArray();
-        out.close();
-
-        return arrayBytes;
-    }
-
     @Override
     public void execCommand() {
         this.filesList = sourceDirectory().listFiles();
     }
 
     @Override
-    public byte[] result() throws IOException {
-        return serializedFilesList();
+    public void sendResultToClient() throws IOException {
+        try {
+            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
+            clientSocketOutput.println(prefixAnswer + filesList.length);
+            clientSocketOutput.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ObjectOutput out = null;
+
+        for (int i = 0; i < filesList.length; ++i){
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            out.writeObject(filesList[i]);
+            out.flush();
+        }
     }
 }

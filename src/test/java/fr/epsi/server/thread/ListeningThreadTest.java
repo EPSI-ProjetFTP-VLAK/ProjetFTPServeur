@@ -9,7 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ListeningThreadTest extends TestCase {
-
     private ServerSocket mockedServerSocket;
     private Socket mockedClientSocket;
     private ListeningThread listeningThread;

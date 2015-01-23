@@ -19,22 +19,31 @@ public class TestMkdir {
 
 	@Before
 	public void setup() throws IOException {
-		String testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+		String os = System.getProperty("os.name");
+		String testEnvironementPath = "";
+
+		String testDirectoryName = "testMkdir/";
+		String command = "mkdir::--::" + testDirectoryName;
+
+		if(os.contains("Windows")){
+			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+		}else{
+			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
+		}
 
 		mockedClientSocket = Mockito.mock(Socket.class);
-		String command = "mkdir::--::test/";
 		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
 		Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
 		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-		mockedCommandData = new CommandData("mkdir::--::test/", testEnvironementPath,  mockedClientSocket);
+		mockedCommandData = new CommandData(command, testEnvironementPath,  mockedClientSocket);
 
 		this.command = new Mkdir(mockedCommandData);
 	}
 
 	@After
 	public void tearDown(){
-		String fileToDelete = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6) + "/test";
+		String fileToDelete = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6) + "/testMkdir";
 		File file = new File(fileToDelete);
 		file.delete();
 	}

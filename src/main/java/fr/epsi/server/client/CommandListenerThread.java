@@ -3,7 +3,6 @@ package fr.epsi.server.client;
 import fr.epsi.commands.CommandData;
 import fr.epsi.commands.CommandFactory;
 import fr.epsi.commands.ICommand;
-import fr.epsi.server.core.ServerManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,7 +45,15 @@ public class CommandListenerThread extends Thread{
             }
         }
 
-        commandResolver.interrupt();
+        try {
+            commandResolver.stopListening();
+            commandResolver.join();
+            commandResolver.interrupt();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private boolean isNewCommandCatch(){
@@ -61,11 +68,13 @@ public class CommandListenerThread extends Thread{
     private void readDataFromSocket(){
         /* TO_DO léve des exceptions non fatal tout le temps !! */
 
-        String datas = "";
+        String datas = "error::--::";
 
         try {
-            BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(clientSocket.getInputStream()));
-            datas = bufferedReader.readLine();
+            if(!clientSocket.getInputStream().equals(null)){
+                BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(clientSocket.getInputStream()));
+                datas = bufferedReader.readLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

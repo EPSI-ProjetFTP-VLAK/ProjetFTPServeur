@@ -57,20 +57,12 @@ public class MasterCommand implements ICommand{
     }
 
     @Override
-    public byte[] result() throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = null;
-
-        out = new ObjectOutputStream(bos);
-        out.writeObject("unknow-request");
-        byte[] arrayBytes = bos.toByteArray();
-        out.close();
-
-        return arrayBytes;
+    public String result() {
+        return "error !!";
     }
 
     @Override
-    public void sendResultToClient(){
+    public void sendResultToClient() throws IOException {
         try {
             PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
             clientSocketOutput.println(result());

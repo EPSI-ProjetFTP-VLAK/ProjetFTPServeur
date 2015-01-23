@@ -3,6 +3,7 @@ package fr.epsi.server.client;
 import fr.epsi.commands.ICommand;
 import fr.epsi.server.core.ServerManager;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,14 @@ import java.util.List;
 public class CommandResolver extends Thread{
     private List<ICommand> commandList;
     private String locationOfTheClientOnTheServer;
+    private boolean stop = false;
 
     public CommandResolver(){
         this.commandList = new ArrayList<ICommand>();
     }
 
     public void run(){
-        while (true){
+        while (!stop){
             if (!commandList.isEmpty() && commandList.size() > 0){
                 int lastCommandIndex = commandList.size() - 1;
 
@@ -25,10 +27,24 @@ public class CommandResolver extends Thread{
                 commandList.get(lastCommandIndex).setDesinationPath(commandList.get(lastCommandIndex).commandData().commandParameter());
                 commandList.get(lastCommandIndex).execCommand();
                 locationOfTheClientOnTheServer = commandList.get(lastCommandIndex).clientLocationAfterCommandExectution();
-                commandList.get(lastCommandIndex).sendResultToClient();
+                try {
+                    commandList.get(lastCommandIndex).sendResultToClient();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 commandList.remove(lastCommandIndex);
             }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public void stopListening(){
+        stop = true;
     }
 
     public void addCommand(ICommand newCommand){

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <server>
-	<port>4011</port>
+	<port>4000</port>
 	<timeout>3500</timeout>
 	<basedirectory>D:/FTPFolder</basedirectory>
 </server>
