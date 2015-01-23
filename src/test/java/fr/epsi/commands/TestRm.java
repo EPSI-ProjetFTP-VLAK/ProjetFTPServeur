@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
+
 public class TestRm {
 	private Rm commande;
 	private Socket mockedClientSocket;
