@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
-import fr.epsi.commands.CommandData;
-import fr.epsi.commands.Ls;
-import fr.epsi.commands.Rm;
+import fr.epsi.commands.Core.CommandData;
+import fr.epsi.commands.Command.Rm;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -52,16 +52,16 @@ public class TestRm {
 	
 	@Test
 	public void deleteFileFromPath(){
-		assertTrue(commande.destinationDirectory.exists());
+		assertTrue(commande.destinationDirectory().exists());
 		commande.execCommand();
-		assertFalse(commande.destinationDirectory.exists());
+		assertFalse(commande.destinationDirectory().exists());
 	}
 
 	@Test
 	public void SocketReturnIsOkay(){
-		assertTrue(commande.destinationDirectory.exists());
+		assertTrue(commande.destinationDirectory().exists());
 		commande.execCommand();
-		assertFalse(commande.destinationDirectory.exists());
+		assertFalse(commande.destinationDirectory().exists());
 		assertTrue(commande.result().equals("rm : OK"));
 	}
 	

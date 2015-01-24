@@ -1,5 +1,7 @@
-package fr.epsi.commands;
+package fr.epsi.commands.Core;
 
+
+import fr.epsi.commands.Core.CommandData;
 
 import java.io.IOException;
 

@@ -1,10 +1,8 @@
 package fr.epsi.server.client;
 
-import fr.epsi.commands.ICommand;
-import fr.epsi.server.core.ServerManager;
+import fr.epsi.commands.Core.ICommand;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +30,9 @@ public class CommandResolver extends Thread{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                commandList.remove(lastCommandIndex);
+
+                //commandList.add(new Ls(new CommandData("ls::--::", locationOfTheClientOnTheServer, )));
+                //commandList.remove(lastCommandIndex);
             }
 
             try {

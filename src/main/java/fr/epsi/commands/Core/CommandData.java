@@ -1,4 +1,4 @@
-package fr.epsi.commands;
+package fr.epsi.commands.Core;
 
 import java.net.Socket;
 

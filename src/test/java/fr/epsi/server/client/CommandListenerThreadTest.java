@@ -15,6 +15,15 @@ public class CommandListenerThreadTest{
 
     @Before
     public void setUp() throws IOException {
+        String os = System.getProperty("os.name");
+        String testEnvironementPath = "";
+
+        if(os.contains("Windows")){
+            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+        }else{
+            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
+        }
+
         mockedClientSocket = Mockito.mock(Socket.class);
 
         InputStream InputStream = new ByteArrayInputStream("ls::--::".getBytes(StandardCharsets.UTF_8));
@@ -23,7 +32,7 @@ public class CommandListenerThreadTest{
         Mockito.doReturn(InputStream).when(mockedClientSocket).getInputStream();
         Mockito.doReturn(mockedOutputStream).when(mockedClientSocket).getOutputStream();
 
-        commandListenerThread = new CommandListenerThread(mockedClientSocket, "D:/FTPFolder");
+        commandListenerThread = new CommandListenerThread(mockedClientSocket, testEnvironementPath);
     }
 
     @Test

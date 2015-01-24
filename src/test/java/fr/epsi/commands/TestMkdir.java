@@ -1,5 +1,7 @@
 package fr.epsi.commands;
 
+import fr.epsi.commands.Command.Mkdir;
+import fr.epsi.commands.Core.CommandData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +45,16 @@ public class TestMkdir {
 
 	@After
 	public void tearDown(){
-		String fileToDelete = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6) + "/testMkdir";
+		String os = System.getProperty("os.name");
+		String testEnvironementPath = "";
+
+		if(os.contains("Windows")){
+			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+		}else{
+			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
+		}
+
+		String fileToDelete = testEnvironementPath + "/testMkdir";
 		File file = new File(fileToDelete);
 		file.delete();
 	}

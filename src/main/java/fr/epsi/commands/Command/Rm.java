@@ -1,4 +1,7 @@
-package fr.epsi.commands;
+package fr.epsi.commands.Command;
+
+import fr.epsi.commands.Core.CommandData;
+import fr.epsi.commands.Core.MasterCommand;
 
 public class Rm extends MasterCommand {
 	private String prefixAnswer = "rm : ";

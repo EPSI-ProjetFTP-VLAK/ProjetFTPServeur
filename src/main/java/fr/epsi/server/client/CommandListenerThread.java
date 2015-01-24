@@ -1,8 +1,8 @@
 package fr.epsi.server.client;
 
-import fr.epsi.commands.CommandData;
-import fr.epsi.commands.CommandFactory;
-import fr.epsi.commands.ICommand;
+import fr.epsi.commands.Core.CommandData;
+import fr.epsi.commands.Core.CommandFactory;
+import fr.epsi.commands.Core.ICommand;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,7 @@
-package fr.epsi.commands;
+package fr.epsi.commands.Core;
+
+import fr.epsi.commands.Command.*;
+import fr.epsi.commands.Command.Error;
 
 public class CommandFactory {
     public static ICommand createCommand(CommandData commandData){

@@ -1,5 +1,7 @@
 package fr.epsi.commands;
 
+import fr.epsi.commands.Command.Ls;
+import fr.epsi.commands.Core.CommandData;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -18,7 +20,6 @@ public class TestLs {
     @Before
     public void setup() throws IOException {
         String os = System.getProperty("os.name");
-        System.out.println(os);
         String testEnvironementPath = "";
 
         if(os.contains("Windows")){

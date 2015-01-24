@@ -1,11 +1,14 @@
-package fr.epsi.commands;
+package fr.epsi.commands.Core;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MasterCommand implements ICommand{
+import fr.epsi.commands.Core.ICommand;
+import fr.epsi.commands.Core.CommandData;
+
+public class MasterCommand implements ICommand {
     protected Path sourcePath;
     protected Path destinationPath;
 
@@ -79,6 +82,8 @@ public class MasterCommand implements ICommand{
     public void setDestinationDirectory(){
         destinationDirectory = new File(destinationPath.toString());
     }
+
+    public File destinationDirectory(){ return this.destinationDirectory; }
 
     public File sourceDirectory(){
         return sourceDirectory;

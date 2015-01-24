@@ -1,6 +1,7 @@
-package fr.epsi.commands;
+package fr.epsi.commands.Command;
 
-import fr.epsi.commands.CommandData;
+import fr.epsi.commands.Core.CommandData;
+import fr.epsi.commands.Core.MasterCommand;
 
 import java.io.IOException;
 import java.nio.file.Files;
