@@ -1,12 +1,10 @@
 package fr.epsi.commands.Core;
 
+import fr.epsi.commands.DTO.FileDTO;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import fr.epsi.commands.Core.ICommand;
-import fr.epsi.commands.Core.CommandData;
 
 public class MasterCommand implements ICommand {
     protected Path sourcePath;
@@ -18,14 +16,24 @@ public class MasterCommand implements ICommand {
     protected Socket clientSocket;
 
     protected CommandData commandData;
-    protected String parameter;
 
     public MasterCommand(CommandData p_commandData){
         this.clientSocket = p_commandData.clientSocket();
         this.commandData = p_commandData;
 
-        setSourcePath(p_commandData.locationOfTheClientOnTheServer());
-        setDesinationPath(p_commandData.locationOfTheClientOnTheServer() + "/" + p_commandData.commandParameter());
+        inializeFiles();
+    }
+
+    private void inializeFiles() {
+        if (thereIsAtLeastTwoParameter()){
+            setSourceFile(commandData.locationOfTheClientOnTheServer() + "/" + commandData.commandParameter().split("::--::")[1]);
+            setDesinationFile(commandData.locationOfTheClientOnTheServer() + "/" + commandData.commandParameter().split("::--::")[0]);
+        }else if(thereIsAtLeastOneParameter()){
+            setSourceFile(commandData.locationOfTheClientOnTheServer());
+            setDesinationFile(commandData.locationOfTheClientOnTheServer() + "/" + commandData.commandParameter());
+        } else {
+            setSourceFile(commandData.locationOfTheClientOnTheServer());
+        }
     }
 
     @Override
@@ -34,25 +42,16 @@ public class MasterCommand implements ICommand {
     }
 
     @Override
-     public void setSourcePath(String path){
-        this.sourcePath = Paths.get(path);
-        setSourceDirectory();
-    }
-
-    @Override
     public String clientLocationAfterCommandExectution(){
         return commandData.locationOfTheClientOnTheServer();
     }
 
-    @Override
-    public void setDesinationPath(String destinationPath){
-        this.destinationPath = Paths.get(destinationPath);
-        setDestinationDirectory();
+    public boolean thereIsAtLeastOneParameter(){
+        return !this.commandData.commandParameter().trim().equals("");
     }
 
-    @Override
-    public void setParameters(){
-        parameter = this.commandData.commandParameter();
+    public boolean thereIsAtLeastTwoParameter(){
+        return this.commandData.commandParameter().split("::--::").length >= 2;
     }
 
     @Override
@@ -75,21 +74,19 @@ public class MasterCommand implements ICommand {
         }
     }
 
-    public void setSourceDirectory(){
-        sourceDirectory = new File(sourcePath.toString());
+    @Override
+    public void setSourceFile(String sourcePath){
+        sourceDirectory = new File(sourcePath);
     }
 
-    public void setDestinationDirectory(){
-        destinationDirectory = new File(destinationPath.toString());
+    @Override
+    public void setDesinationFile(String sourcePath){
+        destinationDirectory = new File(sourcePath);
     }
 
     public File destinationDirectory(){ return this.destinationDirectory; }
 
     public File sourceDirectory(){
         return sourceDirectory;
-    }
-
-    public Socket clientSocket(){
-        return clientSocket;
     }
 }

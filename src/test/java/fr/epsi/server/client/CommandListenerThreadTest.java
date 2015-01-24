@@ -39,9 +39,9 @@ public class CommandListenerThreadTest{
     public void canInterceptCommand() throws InterruptedException {
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
-        commandListenerThread.start();
+        commandListenerThread.startThread();
         commandListenerThread.join();
-        commandListenerThread.stopListener();
+        commandListenerThread.stopThread();
 
         assertEquals(1, commandListenerThread.numberOfCommandCatch());
     }
@@ -53,8 +53,8 @@ public class CommandListenerThreadTest{
 
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
-        commandListenerThread.start();
-        commandListenerThread.stopListener();
+        commandListenerThread.startThread();
+        commandListenerThread.stopThread();
         commandListenerThread.join();
         commandListenerThread.interrupt();
 

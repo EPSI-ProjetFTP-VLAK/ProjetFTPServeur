@@ -1,43 +1,85 @@
-/*import java.io.File;
-import java.io.IOException;
+package fr.epsi.commands;
 
-import fr.epsi.commands.Mv;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.Socket;
+
+import fr.epsi.commands.Command.Mv;
+import fr.epsi.commands.Core.CommandData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
 public class TestMv {
 	
 	private Mv commande;
-	private String sourceString = "Z:/application2014-2015/serveurFTP/target/test-classes/testCopie.txt";
-	private String destinationString = "Z:/application2014-2015/serveurFTP/target/test-classes/test/testCopie.txt";
+	private Socket mockedClientSocket;
+	private CommandData mockedCommandData;
 
 	
 	@Before
 	public void setUp(){
-		
-		commande = new Mv();
-		commande.setSourcePath(sourceString);
-		commande.setDestinationPath(destinationString);
+		String os = System.getProperty("os.name");
+		String testEnvironementPath = "";
+
+		if(os.contains("Windows")){
+			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
+		}else{
+			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
+		}
+
+		String sourceString = "/move.txt";
+		String destinationString =  "/test/move.txt";
+		String command = "rm::--::" + destinationString + "::--::" + sourceString;
+
 		try {
-			new File(sourceString).createNewFile();
+			new File(testEnvironementPath + sourceString).createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		if(!new File(testEnvironementPath + "/test").exists())
+            new File(testEnvironementPath + "/test").mkdir();
+
+		mockedClientSocket = Mockito.mock(Socket.class);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
+
+		try {
+			Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
+
+		mockedCommandData = new CommandData(command, testEnvironementPath, mockedClientSocket);
+
+		commande = new Mv(mockedCommandData);
 	}
 	
 	@Test
-	public void fileIsMoveInPath(){
-		assertTrue(commande.sourceDirectory.exists());
+	public void fileIsMoveInPath() {
+		assertTrue(commande.sourceDirectory().exists());
 		commande.execCommand();
-		assertTrue(commande.destinationDirectory.exists());
-		assertFalse(commande.sourceDirectory.exists());
+		assertTrue(commande.destinationDirectory().exists());
+		assertFalse(commande.sourceDirectory().exists());
+	}
+
+	@Test
+	public void SocketReturnIsOkay(){
+		assertTrue(commande.sourceDirectory().exists());
+		commande.execCommand();
+		assertFalse(commande.sourceDirectory().exists());
+		assertTrue(commande.destinationDirectory().exists());
+		assertTrue(commande.result().equals("mv : OK"));
 	}
 	
 	@After
 	public void initFilesInDirectory(){
-		new File(sourceString).delete();
+		commande.destinationDirectory().delete();
 	}
-}*/
+}

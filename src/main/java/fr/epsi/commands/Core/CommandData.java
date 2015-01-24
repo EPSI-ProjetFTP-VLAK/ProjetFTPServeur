@@ -1,5 +1,7 @@
 package fr.epsi.commands.Core;
 
+import fr.epsi.commands.DTO.FileDTO;
+
 import java.net.Socket;
 
 public class CommandData {
@@ -12,6 +14,8 @@ public class CommandData {
     private String firstCommandParameter;
     private Socket clientSocket;
     private String locationOfTheClientOnTheServer;
+    protected FileDTO DestinationfileDTO;
+    protected FileDTO SourceFileDTO;
 
     public CommandData(String command, String locationOfTheClientOnTheServer, Socket socket){
         if (command == null || command.isEmpty()){

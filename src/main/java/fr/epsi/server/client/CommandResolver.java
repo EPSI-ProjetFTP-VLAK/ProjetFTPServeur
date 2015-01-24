@@ -1,15 +1,15 @@
 package fr.epsi.server.client;
 
 import fr.epsi.commands.Core.ICommand;
+import fr.epsi.utils.ThreadMaster;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandResolver extends Thread{
+public class CommandResolver extends ThreadMaster{
     private List<ICommand> commandList;
     private String locationOfTheClientOnTheServer;
-    private boolean stop = false;
 
     public CommandResolver(){
         this.commandList = new ArrayList<ICommand>();
@@ -17,34 +17,41 @@ public class CommandResolver extends Thread{
 
     public void run(){
         while (!stop){
-            if (!commandList.isEmpty() && commandList.size() > 0){
-                int lastCommandIndex = commandList.size() - 1;
-
-                commandList.get(lastCommandIndex).setParameters();
-                commandList.get(lastCommandIndex).setSourcePath(commandList.get(lastCommandIndex).commandData().locationOfTheClientOnTheServer());
-                commandList.get(lastCommandIndex).setDesinationPath(commandList.get(lastCommandIndex).commandData().commandParameter());
-                commandList.get(lastCommandIndex).execCommand();
-                locationOfTheClientOnTheServer = commandList.get(lastCommandIndex).clientLocationAfterCommandExectution();
-                try {
-                    commandList.get(lastCommandIndex).sendResultToClient();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                //commandList.add(new Ls(new CommandData("ls::--::", locationOfTheClientOnTheServer, )));
-                //commandList.remove(lastCommandIndex);
+            if (thereIsCommandToExecute()){
+                executelastCatchedCommand();
             }
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waintNSeconds(500);
         }
     }
 
-    public void stopListening(){
-        stop = true;
+    private boolean thereIsCommandToExecute() {
+        return !commandList.isEmpty() && commandList.size() > 0;
+    }
+
+    private void executelastCatchedCommand() {
+        lastCommand().execCommand();
+        locationOfTheClientOnTheServer = lastCommand().clientLocationAfterCommandExectution();
+        sendResultToClient();
+    }
+
+    private ICommand lastCommand() {
+        return  commandList.get(commandList.size() - 1);
+    }
+
+    private void sendResultToClient() {
+        try {
+            lastCommand().sendResultToClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void waintNSeconds(int N) {
+        try {
+            Thread.sleep(N);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addCommand(ICommand newCommand){

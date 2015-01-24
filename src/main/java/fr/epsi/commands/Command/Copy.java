@@ -22,7 +22,7 @@ public class Copy extends MasterCommand {
 	@Override
     public void execCommand() {
 		try {
-			fileCopied = Files.copy(sourcePath, destinationPath);
+			fileCopied = Files.copy(sourceDirectory.toPath(), destinationDirectory.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
