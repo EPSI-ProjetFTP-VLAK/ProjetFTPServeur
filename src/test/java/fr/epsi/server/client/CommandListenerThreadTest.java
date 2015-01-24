@@ -40,8 +40,10 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        commandListenerThread.join();
+        Thread.sleep(1000);
         commandListenerThread.stopThread();
+        commandListenerThread.join();
+
 
         assertEquals(1, commandListenerThread.numberOfCommandCatch());
     }
@@ -54,6 +56,7 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
+        Thread.sleep(1000);
         commandListenerThread.stopThread();
         commandListenerThread.join();
         commandListenerThread.interrupt();

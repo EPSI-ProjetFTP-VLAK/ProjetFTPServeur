@@ -5,7 +5,7 @@ import fr.epsi.commands.DTO.FileDTO;
 import java.net.Socket;
 
 public class CommandData {
-    private final String[] allowedCommands = {"ls", "mkdir", "rm", "mv", "copy"};
+    private final String[] allowedCommands = {"ls", "mkdir", "rm", "mv", "copy", "cd"};
     private final String parameterDelimiter = "::--::";
     private String defaultCommandType = "command not allowed" + parameterDelimiter;
     private String defaultParameter = "";
@@ -56,6 +56,8 @@ public class CommandData {
     }
 
     public String locationOfTheClientOnTheServer(){ return locationOfTheClientOnTheServer; }
+
+    public void setLocationOfTheClientOnTheServer(String newLocationOfTheClientOnTheServer){ locationOfTheClientOnTheServer = newLocationOfTheClientOnTheServer; }
 
     public boolean commandExist(){
         boolean commandExist = false;

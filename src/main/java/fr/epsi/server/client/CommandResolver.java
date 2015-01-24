@@ -19,6 +19,7 @@ public class CommandResolver extends ThreadMaster{
         while (!stop){
             if (thereIsCommandToExecute()){
                 executelastCatchedCommand();
+                commandList.remove(commandList.size() - 1);
             }
             waintNSeconds(500);
         }

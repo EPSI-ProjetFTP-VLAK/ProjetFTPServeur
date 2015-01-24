@@ -26,7 +26,8 @@ public class CommandListenerThread extends ThreadMaster{
     }
 
     public void run(){
-        commandResolver.start();
+        if(!commandResolver.isAlive())
+            commandResolver.start();
 
         while(!stop){
             readDataFromSocket();
@@ -38,12 +39,14 @@ public class CommandListenerThread extends ThreadMaster{
             waitNMilliseconds(500);
         }
 
-        stopCommandResolverThread();
+        if (stop = true)
+            stopCommandResolverThread();
     }
 
     private void sendCommandToExecution() {
         numberOfCommandCatch++;
         commandResolver.addCommand(CommandFactory.createCommand(commandToCheck));
+        waitNMilliseconds(750);
         this.locationOfTheClientOnTheServer = commandResolver.getLocationOfTheClientOnTheServerAfterCommandExecution();
     }
 
@@ -88,6 +91,10 @@ public class CommandListenerThread extends ThreadMaster{
             e.printStackTrace();
         }
 
+        if(datas == null){
+            datas = "error";
+        }
+
         commandToCheck = new CommandData(datas, this.locationOfTheClientOnTheServer, clientSocket);
     }
 
@@ -97,5 +104,9 @@ public class CommandListenerThread extends ThreadMaster{
 
     public int numberOfCommandCatch(){
         return numberOfCommandCatch;
+    }
+
+    public String locationOfTheClientOnTheServer(){
+        return locationOfTheClientOnTheServer;
     }
 }

@@ -60,11 +60,11 @@ public class MasterCommand implements ICommand {
 
     @Override
     public String result() {
-        return "error !!";
+        return "error";
     }
 
     @Override
-    public void sendResultToClient() throws IOException {
+    public void sendResultToClient(){
         try {
             PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
             clientSocketOutput.println(result());
