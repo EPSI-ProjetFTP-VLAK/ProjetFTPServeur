@@ -2,6 +2,7 @@ package fr.epsi.commands.Command;
 
 import fr.epsi.commands.Core.CommandData;
 import fr.epsi.commands.Core.MasterCommand;
+import fr.epsi.commands.DTO.FileDTO;
 
 import java.io.*;
 
@@ -33,7 +34,7 @@ public class Ls extends MasterCommand {
         try {
             for (int i = 0; i < filesList.length; ++i){
                 out = new ObjectOutputStream(clientSocket.getOutputStream());
-                out.writeObject(filesList[i]);
+                out.writeObject(new FileDTO(filesList[i]));
                 out.flush();
             }
         } catch (IOException e) {
