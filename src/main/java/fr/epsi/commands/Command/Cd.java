@@ -17,4 +17,9 @@ public class Cd extends MasterCommand{
     public String clientLocationAfterCommandExectution(){
         return this.destinationDirectory.toString();
     }
+
+    @Override
+    public String result(){
+        return this.destinationDirectory().toString();
+    }
 }

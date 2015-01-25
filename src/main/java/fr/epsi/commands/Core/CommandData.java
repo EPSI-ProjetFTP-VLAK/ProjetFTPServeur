@@ -5,7 +5,7 @@ import fr.epsi.commands.DTO.FileDTO;
 import java.net.Socket;
 
 public class CommandData {
-    private final String[] allowedCommands = {"ls", "mkdir", "rm", "mv", "copy", "cd"};
+    private final String[] allowedCommands = {"ls", "mkdir", "rm", "mv", "copy", "cd", "pwd"};
     private final String parameterDelimiter = "::--::";
     private String defaultCommandType = "command not allowed" + parameterDelimiter;
     private String defaultParameter = "";

@@ -19,6 +19,8 @@ public class CommandFactory {
             command = new Copy(commandData);
         }else if(commandData.commandType().equals("cd")){
             command = new Cd(commandData);
+        }else if(commandData.commandType().equals("pwd")){
+            command = new Pwd(commandData);
         }else{
             command = new Error(commandData);
         }

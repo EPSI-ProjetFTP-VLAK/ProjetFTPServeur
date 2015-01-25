@@ -1,8 +1,6 @@
 package fr.epsi.commands;
 
-import fr.epsi.commands.Core.CommandData;
 import fr.epsi.server.client.CommandListenerThread;
-import fr.epsi.server.client.CommandResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -11,8 +9,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestCd {
     private CommandListenerThread commandListenerThread;

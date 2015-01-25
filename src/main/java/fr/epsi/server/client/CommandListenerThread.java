@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.List;
 
-public class CommandListenerThread extends ThreadMaster{
+public class  CommandListenerThread extends ThreadMaster{
     private Socket clientSocket;
     private CommandResolver commandResolver;
     private int numberOfCommandCatch;
@@ -35,8 +35,6 @@ public class CommandListenerThread extends ThreadMaster{
             if(isNewCommandCatch()){
                 sendCommandToExecution();
             }
-
-            waitNMilliseconds(500);
         }
 
         if (stop = true)
@@ -46,7 +44,7 @@ public class CommandListenerThread extends ThreadMaster{
     private void sendCommandToExecution() {
         numberOfCommandCatch++;
         commandResolver.addCommand(CommandFactory.createCommand(commandToCheck));
-        waitNMilliseconds(750);
+        waitNMilliseconds(500);
         this.locationOfTheClientOnTheServer = commandResolver.getLocationOfTheClientOnTheServerAfterCommandExecution();
     }
 

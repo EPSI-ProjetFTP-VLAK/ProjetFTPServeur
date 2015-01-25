@@ -4,12 +4,8 @@ import fr.epsi.commands.DTO.FileDTO;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Path;
 
 public class MasterCommand implements ICommand {
-    protected Path sourcePath;
-    protected Path destinationPath;
-
     protected File sourceDirectory;
     protected File destinationDirectory;
 
