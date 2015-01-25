@@ -63,7 +63,7 @@ public class TestCd {
 
         System.out.println(commandListenerThread.locationOfTheClientOnTheServer());
         assertEquals(commandListenerThread.locationOfTheClientOnTheServer().replace("\\", "/"), testEnvironementPath + "/testCd");
-        assertEquals(1, commandListenerThread.numberOfCommandCatch());
+        assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
 
     }
 }

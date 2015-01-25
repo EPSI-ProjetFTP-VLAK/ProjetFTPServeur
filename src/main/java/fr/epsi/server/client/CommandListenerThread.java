@@ -34,11 +34,22 @@ public class  CommandListenerThread extends ThreadMaster{
 
             if(isNewCommandCatch()){
                 sendCommandToExecution();
+                addNewLs();
             }
         }
 
         if (stop = true)
             stopCommandResolverThread();
+    }
+
+    private void addNewLs() {
+        numberOfCommandCatch++;
+        commandResolver.addCommand(CommandFactory.createCommand(LsFromHere()));
+        waitNMilliseconds(500);
+    }
+
+    private CommandData LsFromHere(){
+        return new CommandData("ls::--::", locationOfTheClientOnTheServer, clientSocket);
     }
 
     private void sendCommandToExecution() {

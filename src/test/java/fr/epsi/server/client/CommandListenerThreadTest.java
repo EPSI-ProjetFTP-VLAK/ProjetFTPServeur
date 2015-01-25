@@ -36,7 +36,7 @@ public class CommandListenerThreadTest{
     }
 
     @Test
-    public void canInterceptCommand() throws InterruptedException {
+    public void canInterceptCommandExecuteTheCommandAndALs() throws InterruptedException {
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
@@ -44,8 +44,8 @@ public class CommandListenerThreadTest{
         commandListenerThread.stopThread();
         commandListenerThread.join();
 
-
-        assertEquals(1, commandListenerThread.numberOfCommandCatch());
+        /* + 1 for the ls return () */
+        assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
     }
 
     @Test
