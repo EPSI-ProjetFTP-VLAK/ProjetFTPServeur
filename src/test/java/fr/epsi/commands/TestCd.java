@@ -1,6 +1,8 @@
 package fr.epsi.commands;
 
 import fr.epsi.server.client.CommandListenerThread;
+import fr.epsi.utils.ConfigOS;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,19 +14,16 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.Assert.*;
 
 public class TestCd {
+	
     private CommandListenerThread commandListenerThread;
     private Socket mockedClientSocket;
 
     @Before
     public void setUp() throws IOException {
-        String os = System.getProperty("os.name");
-        String testEnvironementPath = "";
-
-        if(os.contains("Windows")){
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-        }else{
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-        }
+    	
+    	String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
         mockedClientSocket = Mockito.mock(Socket.class);
 
@@ -34,7 +33,7 @@ public class TestCd {
         Mockito.doReturn(InputStream).when(mockedClientSocket).getInputStream();
         Mockito.doReturn(mockedOutputStream).when(mockedClientSocket).getOutputStream();
 
-        commandListenerThread = new CommandListenerThread(mockedClientSocket, testEnvironementPath);
+        commandListenerThread = new CommandListenerThread(mockedClientSocket, urlTestDirectory);
     }
 
     @Test

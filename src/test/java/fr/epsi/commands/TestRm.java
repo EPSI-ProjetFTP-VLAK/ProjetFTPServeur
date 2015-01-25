@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import fr.epsi.commands.Core.CommandData;
 import fr.epsi.commands.Command.Rm;
+import fr.epsi.utils.ConfigOS;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,20 +23,16 @@ public class TestRm {
 	
 	@Before
 	public void setUp() throws IOException {
-		String os = System.getProperty("os.name");
-		String testEnvironementPath = "";
-
-		if(os.contains("Windows")){
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-		}else{
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-		}
-
+	
+		String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String urlTestDirectory = os.getUrlEnv(testDirectory);
+    	
 		String destinationString =  "/doc.txt";
 		String command = "rm::--::" + destinationString;
 
 		try {
-			new File(testEnvironementPath + destinationString).createNewFile();
+			new File(urlTestDirectory + destinationString).createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +42,7 @@ public class TestRm {
 		Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
 		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-		mockedCommandData = new CommandData(command, testEnvironementPath, mockedClientSocket);
+		mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
 
 		commande = new Rm(mockedCommandData);
 	}

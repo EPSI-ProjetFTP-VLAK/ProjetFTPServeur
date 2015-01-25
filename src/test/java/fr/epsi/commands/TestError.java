@@ -2,6 +2,8 @@ package fr.epsi.commands;
 
 import fr.epsi.commands.Command.Error;
 import fr.epsi.commands.Core.CommandData;
+import fr.epsi.utils.ConfigOS;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,22 +21,18 @@ public class TestError {
 
     @Before
     public void setUp(){
-        String os = System.getProperty("os.name");
-        String testEnvironementPath = "";
-
-        if(os.contains("Windows")){
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-        }else{
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-        }
+    	
+    	String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
         String command = "fakeeeeee : !a ad av535";
         mockedClientSocket = Mockito.mock(Socket.class);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
+        new ByteArrayInputStream( command.getBytes() );
 
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-        mockedCommandData = new CommandData(command, testEnvironementPath, mockedClientSocket);
+        mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
 
         commande = new Error(mockedCommandData);
     }

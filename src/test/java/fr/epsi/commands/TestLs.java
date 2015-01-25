@@ -2,11 +2,14 @@ package fr.epsi.commands;
 
 import fr.epsi.commands.Command.Ls;
 import fr.epsi.commands.Core.CommandData;
+import fr.epsi.utils.ConfigOS;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -19,15 +22,10 @@ public class TestLs {
 
     @Before
     public void setup() throws IOException {
-        String os = System.getProperty("os.name");
-        String testEnvironementPath = "";
-
-        if(os.contains("Windows")){
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-        }else{
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-        }
-
+    	
+    	String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
         mockedClientSocket = Mockito.mock(Socket.class);
         String command = "ls::--::";
@@ -35,7 +33,7 @@ public class TestLs {
         Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-        mockedCommandData = new CommandData("ls::--::", testEnvironementPath, mockedClientSocket);
+        mockedCommandData = new CommandData("ls::--::", urlTestDirectory, mockedClientSocket);
 
         this.command = new Ls(mockedCommandData);
     }

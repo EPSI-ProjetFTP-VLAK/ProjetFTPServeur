@@ -2,6 +2,8 @@ package fr.epsi.commands;
 
 import fr.epsi.commands.Command.Mkdir;
 import fr.epsi.commands.Core.CommandData;
+import fr.epsi.utils.ConfigOS;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,40 +23,31 @@ public class TestMkdir {
 
 	@Before
 	public void setup() throws IOException {
-		String os = System.getProperty("os.name");
-		String testEnvironementPath = "";
-
+	
 		String testDirectoryName = "testMkdir/";
 		String command = "mkdir::--::" + testDirectoryName;
 
-		if(os.contains("Windows")){
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-		}else{
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-		}
+		String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
 		mockedClientSocket = Mockito.mock(Socket.class);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
 		Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
 		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-		mockedCommandData = new CommandData(command, testEnvironementPath,  mockedClientSocket);
+		mockedCommandData = new CommandData(command, urlTestDirectory,  mockedClientSocket);
 
 		this.command = new Mkdir(mockedCommandData);
 	}
 
 	@After
 	public void tearDown(){
-		String os = System.getProperty("os.name");
-		String testEnvironementPath = "";
+		String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String url = os.getUrlEnv(testDirectory);
 
-		if(os.contains("Windows")){
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-		}else{
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-		}
-
-		String fileToDelete = testEnvironementPath + "/testMkdir";
+		String fileToDelete = url + "/testMkdir";
 		File file = new File(fileToDelete);
 		file.delete();
 	}

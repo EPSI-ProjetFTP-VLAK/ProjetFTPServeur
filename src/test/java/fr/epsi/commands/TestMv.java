@@ -7,6 +7,8 @@ import java.net.Socket;
 
 import fr.epsi.commands.Command.Mv;
 import fr.epsi.commands.Core.CommandData;
+import fr.epsi.utils.ConfigOS;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,27 +25,23 @@ public class TestMv {
 	
 	@Before
 	public void setUp(){
-		String os = System.getProperty("os.name");
-		String testEnvironementPath = "";
-
-		if(os.contains("Windows")){
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-		}else{
-			testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-		}
+		
+		String testDirectory = "EnvTest";
+    	ConfigOS os = new ConfigOS();
+    	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
 		String sourceString = "/move.txt";
 		String destinationString =  "/test/move.txt";
 		String command = "rm::--::" + destinationString + "::--::" + sourceString;
 
 		try {
-			new File(testEnvironementPath + sourceString).createNewFile();
+			new File(urlTestDirectory + sourceString).createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		if(!new File(testEnvironementPath + "/test").exists())
-            new File(testEnvironementPath + "/test").mkdir();
+		if(!new File(urlTestDirectory + "/test").exists())
+            new File(urlTestDirectory + "/test").mkdir();
 
 		mockedClientSocket = Mockito.mock(Socket.class);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
@@ -56,7 +54,7 @@ public class TestMv {
 
 		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-		mockedCommandData = new CommandData(command, testEnvironementPath, mockedClientSocket);
+		mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
 
 		commande = new Mv(mockedCommandData);
 	}
