@@ -11,4 +11,12 @@ public class ThreadMaster extends Thread{
         stop = false;
         this.start();
     }
+    
+    public void waitNMilliseconds(int N){
+        try {
+            Thread.sleep(N);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+}
 }

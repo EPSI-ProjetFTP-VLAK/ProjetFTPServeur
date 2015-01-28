@@ -59,7 +59,7 @@ public class  CommandListenerThread extends ThreadMaster{
         waitIfCommandIsCd(500);
         this.locationOfTheClientOnTheServer = commandResolver.getLocationOfTheClientOnTheServerAfterCommandExecution();
     }
-
+    
     private void stopCommandResolverThread() {
         try {
             commandResolver.stopThread();
@@ -83,14 +83,6 @@ public class  CommandListenerThread extends ThreadMaster{
     	if(commandToCheck.commandType().equalsIgnoreCase(command)){
     		waitNMilliseconds(N);
     	}
-    }
-
-    public void waitNMilliseconds(int N){
-	        try {
-	            Thread.sleep(N);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
     }
 
     private void readDataFromSocket(){

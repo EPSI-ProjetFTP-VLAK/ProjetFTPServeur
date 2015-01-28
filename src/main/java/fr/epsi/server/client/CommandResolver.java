@@ -21,7 +21,7 @@ public class CommandResolver extends ThreadMaster{
                 executelastCatchedCommand();
                 commandList.remove(commandList.size() - 1);
             }
-            waintNSeconds(500);
+            waitNMilliseconds(500);
         }
     }
 
@@ -43,14 +43,6 @@ public class CommandResolver extends ThreadMaster{
         try {
             lastCommand().sendResultToClient();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void waintNSeconds(int N) {
-        try {
-            Thread.sleep(N);
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
