@@ -5,7 +5,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ListeningThread extends Thread {
+import fr.epsi.utils.ThreadMaster;
+
+public class ListeningThread extends ThreadMaster {
 
     private ServerSocket serverSocket;
 
@@ -21,7 +23,7 @@ public class ListeningThread extends Thread {
                 sendAcceptationMessage(clientSocket);
 
                 AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
-                authenticationThread.start();
+                authenticationThread.startThread();
             } catch (IOException e) {
                 e.printStackTrace();
             }

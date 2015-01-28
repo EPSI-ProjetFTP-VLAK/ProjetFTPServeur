@@ -3,13 +3,14 @@ package fr.epsi.server.core;
 import fr.epsi.server.client.Client;
 import fr.epsi.server.thread.ListeningThread;
 import fr.epsi.utils.AbstractLogger;
+import fr.epsi.utils.ThreadMaster;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server extends Thread{
+public class Server extends ThreadMaster{
     private ServerConfiguration serverConfiguration;
     private ServerSocket serverSocket;
     private Thread listeningThread;
@@ -26,7 +27,7 @@ public class Server extends Thread{
     }
 
     public void run(){
-        while(true){
+        while(!stop){
             checkForDisconectedPeers();
         }
     }
@@ -53,7 +54,7 @@ public class Server extends Thread{
 
     public void startServer() {
         listeningThread.start();
-        this.start();
+        this.startThread();
         AbstractLogger.log("Serveur démmaré ...");
     }
 

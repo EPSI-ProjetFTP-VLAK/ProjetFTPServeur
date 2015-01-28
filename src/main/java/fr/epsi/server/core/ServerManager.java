@@ -1,17 +1,16 @@
 package fr.epsi.server.core;
 
 import fr.epsi.utils.AbstractLogger;
+import fr.epsi.utils.ThreadMaster;
 
-public class ServerManager extends Thread{
+public class ServerManager extends ThreadMaster{
     private static Server FTPServer;
-    private boolean keepRunning;
 
     public ServerManager(){
-        keepRunning = true;
     }
 
     public void run(){
-        while(keepRunning){
+        while(!stop){
             String commandManager = AbstractLogger.getConsoleInput();
 
             if(!commandManager.isEmpty()){
@@ -29,7 +28,7 @@ public class ServerManager extends Thread{
             loadServer();
         } else if (command.toLowerCase().equals("exit")){
             stopServer();
-            keepRunning = false;
+            stop = true;
         }else if(command.toLowerCase().equals("users")){
             displayClients();
         }

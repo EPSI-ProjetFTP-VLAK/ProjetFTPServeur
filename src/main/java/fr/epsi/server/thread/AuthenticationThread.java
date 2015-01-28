@@ -3,6 +3,7 @@ package fr.epsi.server.thread;
 import fr.epsi.server.client.Client;
 import fr.epsi.server.core.ServerManager;
 import fr.epsi.utils.AbstractLogger;
+import fr.epsi.utils.ThreadMaster;
 import fr.epsi.utils.XMLParser;
 
 import java.io.BufferedReader;
@@ -11,7 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class AuthenticationThread extends Thread {
+public class AuthenticationThread extends ThreadMaster {
 
     private Socket clientSocket;
 
@@ -24,13 +25,15 @@ public class AuthenticationThread extends Thread {
         if (!clientSocket.isClosed()) {
             String[] credentials = readCredentialsFromSocket();
             boolean isAuthenticated = isAuthenticated(credentials);
-
+            
             if (isAuthenticated) {
                 ServerManager.getFTPServer().addClient(new Client(credentials[0], clientSocket));
                 AbstractLogger.log(credentials[0] + " est maintenant connecté !");
             }
 
             answerToCredentialsRequest(isAuthenticated);
+        }else{
+        	this.stopThread();
         }
     }
 
