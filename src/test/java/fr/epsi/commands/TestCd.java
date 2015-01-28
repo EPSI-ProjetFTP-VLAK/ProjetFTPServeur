@@ -51,17 +51,12 @@ public class TestCd {
             e.printStackTrace();
         }
 
-        String os = System.getProperty("os.name");
-        String testEnvironementPath = "";
-
-        if(os.contains("Windows")){
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString().substring(6);
-        }else{
-            testEnvironementPath = this.getClass().getClassLoader().getResource("EnvTest").toString();
-        }
+        String testDirectory = "EnvTest";
+        ConfigOS os = new ConfigOS();
+        String urlTestDirectory = os.getUrlEnv(testDirectory);
 
         System.out.println(commandListenerThread.locationOfTheClientOnTheServer());
-        assertEquals(commandListenerThread.locationOfTheClientOnTheServer().replace("\\", "/"), testEnvironementPath + "/testCd");
+        assertEquals(commandListenerThread.locationOfTheClientOnTheServer().replace("\\", "/"), urlTestDirectory + "/testCd");
         assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
 
     }
