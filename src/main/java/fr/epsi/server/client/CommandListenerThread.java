@@ -17,6 +17,7 @@ public class  CommandListenerThread extends ThreadMaster{
     private int numberOfCommandCatch;
     private String locationOfTheClientOnTheServer;
     private CommandData commandToCheck;
+    private static String command = "cd";
 
     public CommandListenerThread(Socket socket, String locationOfTheClientOnTheServer){
         this.clientSocket = socket;
@@ -55,7 +56,7 @@ public class  CommandListenerThread extends ThreadMaster{
     private void sendCommandToExecution() {
         numberOfCommandCatch++;
         commandResolver.addCommand(CommandFactory.createCommand(commandToCheck));
-        waitNMilliseconds(500);
+        waitIfCommandIsCd(500);
         this.locationOfTheClientOnTheServer = commandResolver.getLocationOfTheClientOnTheServerAfterCommandExecution();
     }
 
@@ -77,13 +78,19 @@ public class  CommandListenerThread extends ThreadMaster{
 
         return newCommandCatch;
     }
+    
+    private void waitIfCommandIsCd(int N){
+    	if(commandToCheck.commandType().equalsIgnoreCase(command)){
+    		waitNMilliseconds(N);
+    	}
+    }
 
     public void waitNMilliseconds(int N){
-        try {
-            Thread.sleep(N);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+	        try {
+	            Thread.sleep(N);
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	        }
     }
 
     private void readDataFromSocket(){
