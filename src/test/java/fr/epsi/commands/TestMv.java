@@ -19,10 +19,8 @@ import static org.junit.Assert.*;
 public class TestMv {
 	
 	private Mv commande;
-	private Socket mockedClientSocket;
-	private CommandData mockedCommandData;
 
-	
+
 	@Before
 	public void setUp(){
 		
@@ -43,7 +41,7 @@ public class TestMv {
 		if(!new File(urlTestDirectory + "/test").exists())
             new File(urlTestDirectory + "/test").mkdir();
 
-		mockedClientSocket = Mockito.mock(Socket.class);
+		Socket mockedClientSocket = Mockito.mock(Socket.class);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
 
 		try {
@@ -54,7 +52,7 @@ public class TestMv {
 
 		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-		mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
+		CommandData mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
 
 		commande = new Mv(mockedCommandData);
 	}

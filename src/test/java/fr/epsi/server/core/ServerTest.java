@@ -19,7 +19,6 @@ import java.net.Socket;
 public class ServerTest extends TestCase {
 
     private Server server;
-    private ServerSocket mockedServerSocket;
     private Socket mockedClientSocket;
     private ListeningThread mockedListeningThread;
     private static ServerManager mockedServerManager;
@@ -31,7 +30,7 @@ public class ServerTest extends TestCase {
         PowerMockito.mockStatic(ServerManager.class);
         PowerMockito.when(ServerManager.getFTPServer()).thenReturn(server);
 
-        mockedServerSocket = Mockito.mock(ServerSocket.class);
+        ServerSocket mockedServerSocket = Mockito.mock(ServerSocket.class);
         mockedClientSocket = Mockito.mock(Socket.class);
         mockedListeningThread = Mockito.mock(ListeningThread.class);
     }

@@ -18,17 +18,15 @@ import static org.junit.Assert.*;
 @PrepareForTest(ServerManager.class)
 public class ClientTest {
     private Client mockedClient;
-    private Socket mockedClientSocket;
     private static ServerManager mockedServerManager;
-    private Server mockedServer;
 
     @Before
     public void setUp(){
-        mockedServer = Mockito.mock(Server.class);
+        Server mockedServer = Mockito.mock(Server.class);
         Mockito.when(mockedServer.getServerBaseDirectory()).thenReturn("D:/FTPServer");
 
 
-        mockedClientSocket = Mockito.mock(Socket.class);
+        Socket mockedClientSocket = Mockito.mock(Socket.class);
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
         PowerMockito.mockStatic(ServerManager.class);

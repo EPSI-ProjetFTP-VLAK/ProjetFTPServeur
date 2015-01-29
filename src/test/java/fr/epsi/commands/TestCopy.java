@@ -19,9 +19,7 @@ import static org.junit.Assert.*;
 public class TestCopy {
 	
 	private Copy commande;
-	private Socket mockedClientSocket;
-	private CommandData mockedCommandData;
-	
+
 	@Before
 	public void setUp(){
 		
@@ -44,7 +42,7 @@ public class TestCopy {
 		if(!new File(urlTestDirectory + "/test").exists())
 			new File(urlTestDirectory + "/test").mkdir();
 
-		mockedClientSocket = Mockito.mock(Socket.class);
+		Socket mockedClientSocket = Mockito.mock(Socket.class);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
 
 		try {
@@ -55,7 +53,7 @@ public class TestCopy {
 
 		Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-		mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
+		CommandData mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
 
 		commande = new Copy(mockedCommandData);
 	}

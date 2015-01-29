@@ -16,8 +16,6 @@ import static org.junit.Assert.*;
 
 public class TestError {
     private Error commande;
-    private Socket mockedClientSocket;
-    private CommandData mockedCommandData;
 
     @Before
     public void setUp(){
@@ -27,12 +25,12 @@ public class TestError {
     	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
         String command = "fakeeeeee : !a ad av535";
-        mockedClientSocket = Mockito.mock(Socket.class);
+        Socket mockedClientSocket = Mockito.mock(Socket.class);
         new ByteArrayInputStream( command.getBytes() );
 
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-        mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
+        CommandData mockedCommandData = new CommandData(command, urlTestDirectory, mockedClientSocket);
 
         commande = new Error(mockedCommandData);
     }

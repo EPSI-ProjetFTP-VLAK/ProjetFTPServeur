@@ -15,7 +15,6 @@ public class CommandListenerThreadTest{
     private Socket mockedClientSocket;
     private String testEnvironementPath;
     OutputStream mockedOutputStream;
-    InputStream InputStream;
 
     @Before
     public void setUp() throws IOException {

@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 public class TestCd {
 	
     private CommandListenerThread commandListenerThread;
-    private Socket mockedClientSocket;
 
     @Before
     public void setUp() throws IOException {
@@ -25,7 +24,7 @@ public class TestCd {
     	ConfigOS os = new ConfigOS();
     	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
-        mockedClientSocket = Mockito.mock(Socket.class);
+        Socket mockedClientSocket = Mockito.mock(Socket.class);
 
         InputStream InputStream = new ByteArrayInputStream("cd::--::/testCd".getBytes(StandardCharsets.UTF_8));
         OutputStream mockedOutputStream = new ByteArrayOutputStream();

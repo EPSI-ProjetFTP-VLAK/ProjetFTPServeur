@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -17,8 +16,6 @@ import static org.junit.Assert.*;
 
 public class TestLs {
     private Ls command;
-    private Socket mockedClientSocket;
-    private CommandData mockedCommandData;
 
     @Before
     public void setup() throws IOException {
@@ -27,13 +24,13 @@ public class TestLs {
     	ConfigOS os = new ConfigOS();
     	String urlTestDirectory = os.getUrlEnv(testDirectory);
 
-        mockedClientSocket = Mockito.mock(Socket.class);
+        Socket mockedClientSocket = Mockito.mock(Socket.class);
         String command = "ls::--::";
         ByteArrayInputStream inputStream = new ByteArrayInputStream( command.getBytes() );
         Mockito.when(mockedClientSocket.getInputStream()).thenReturn(inputStream);
         Mockito.when(mockedClientSocket.isConnected()).thenReturn(true);
 
-        mockedCommandData = new CommandData("ls::--::", urlTestDirectory, mockedClientSocket);
+        CommandData mockedCommandData = new CommandData("ls::--::", urlTestDirectory, mockedClientSocket);
 
         this.command = new Ls(mockedCommandData);
     }
