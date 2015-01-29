@@ -28,7 +28,7 @@ public class  CommandListenerThread extends ThreadMaster{
 
     public void run(){
         if(!commandResolver.isAlive())
-            commandResolver.start();
+            commandResolver.startThread();
 
         while(!stop){
             readDataFromSocket();
@@ -44,8 +44,12 @@ public class  CommandListenerThread extends ThreadMaster{
     }
 
     private void addNewLs() {
-        numberOfCommandCatch++;
-        commandResolver.addCommand(CommandFactory.createCommand(LsFromHere()));
+
+        if(!commandToCheck.commandType().equals("ls")){
+            numberOfCommandCatch++;
+            commandResolver.addCommand(CommandFactory.createCommand(LsFromHere()));
+        }
+
         waitNMilliseconds(500);
     }
 
