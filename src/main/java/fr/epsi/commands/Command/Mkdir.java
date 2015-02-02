@@ -15,6 +15,8 @@ public class Mkdir extends MasterCommand {
     public void execCommand(){
 		if(!destinationDirectory.exists())
 			 this.createDirectory = destinationDirectory.mkdir();
+
+		 isExecuted = true;
 	 }
 	 
 	 public boolean getFile(){

@@ -17,26 +17,33 @@ public class Ls extends MasterCommand {
     @Override
     public void execCommand() {
         this.filesList = sourceDirectory().listFiles();
+        isExecuted = true;
     }
 
     @Override
     public void sendResultToClient() {
-        try {
-            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
-            clientSocketOutput.println(prefixAnswer + filesList.length);
-            clientSocketOutput.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sendHeader();
+        sendData();
+    }
 
+    private void sendData() {
         ObjectOutput out = null;
-
         try {
             for (int i = 0; i < filesList.length; ++i){
                 out = new ObjectOutputStream(clientSocket.getOutputStream());
                 out.writeObject(new FileDTO(filesList[i]));
                 out.flush();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendHeader() {
+        try {
+            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
+            clientSocketOutput.println(prefixAnswer + filesList.length);
+            clientSocketOutput.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -7,6 +7,7 @@ import fr.epsi.utils.ThreadMaster;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.List;
@@ -34,23 +35,22 @@ public class  CommandListenerThread extends ThreadMaster{
             readDataFromSocket();
 
             if(isNewCommandCatch()){
-                sendCommandToExecution();
+                  sendCommandToExecution();
                 addNewLs();
             }
+
+            waitNMilliseconds(500);
         }
 
         if (stop = true)
-            stopCommandResolverThread();
+            commandResolver.stopThread();
     }
 
     private void addNewLs() {
-
         if(!commandToCheck.commandType().equals("ls")){
             numberOfCommandCatch++;
             commandResolver.addCommand(CommandFactory.createCommand(LsFromHere()));
         }
-
-        waitNMilliseconds(500);
     }
 
     private CommandData LsFromHere(){
@@ -60,15 +60,14 @@ public class  CommandListenerThread extends ThreadMaster{
     private void sendCommandToExecution() {
         numberOfCommandCatch++;
         commandResolver.addCommand(CommandFactory.createCommand(commandToCheck));
-        waitIfCommandIsCd(500);
+        waitNMilliseconds(500);
+        waitUntilCommandExecutionEnd();
         this.locationOfTheClientOnTheServer = commandResolver.getLocationOfTheClientOnTheServerAfterCommandExecution();
     }
-    
-    private void stopCommandResolverThread() {
-        try {
-            commandResolver.stopThread();
-            commandResolver.join();
-            commandResolver.interrupt();
+
+    private void waitUntilCommandExecutionEnd() {
+        while (commandResolver.isWorking()) try {
+            Thread.sleep(20);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -82,32 +81,44 @@ public class  CommandListenerThread extends ThreadMaster{
 
         return newCommandCatch;
     }
-    
-    private void waitIfCommandIsCd(int N){
-    	if(commandToCheck.commandType().equalsIgnoreCase(command)){
-    		waitNMilliseconds(N);
-    	}
-    }
 
     private void readDataFromSocket(){
-        /* TO_DO léve des exceptions non fatal tout le temps !! */
-
-        String datas = "error::--::";
+        String datas = "";
+        boolean exceptionCatch = false;
 
         try {
-            if(!clientSocket.getInputStream().equals(null)){
-                BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(clientSocket.getInputStream()));
-                datas = bufferedReader.readLine();
+            if(!clientSocket.isClosed() && clientSocket.isBound() && clientSocket.isConnected()){
+                InputStream is = clientSocket.getInputStream();
+                if (is != null) {
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(is));
+                    datas = bufferedReader.readLine();
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
+            exceptionCatch = true;
+            datas = "";
+        }finally {
+            if(exceptionCatch){
+                this.stopThread();
+            }else {
+                if(datas == null){
+                    datas = "error::--::";
+                }else {
+                    if(datas.equals(""))
+                        datas = "error::--::";
+                }
 
-        if(datas == null){
-            datas = "error";
+                commandToCheck = new CommandData(datas, this.locationOfTheClientOnTheServer, clientSocket);
+            }
         }
+    }
 
-        commandToCheck = new CommandData(datas, this.locationOfTheClientOnTheServer, clientSocket);
+    @Override
+    public void stopThread(){
+        commandResolver.stopThread();
+        stop = true;
     }
 
     public List<ICommand> commandList(){

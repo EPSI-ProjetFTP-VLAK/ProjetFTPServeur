@@ -4,7 +4,13 @@ public class ThreadMaster extends Thread{
     protected boolean stop;
 
     public void stopThread(){
-        stop = true;
+        try {
+            stop = true;
+            this.join();
+            this.interrupt();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void startThread(){

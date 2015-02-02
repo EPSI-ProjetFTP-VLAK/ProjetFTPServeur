@@ -1,7 +1,9 @@
 package fr.epsi.server.client;
 import fr.epsi.server.core.ServerManager;
+import fr.epsi.utils.AbstractLogger;
 import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.net.Socket;
 
 public class Client {
@@ -18,7 +20,7 @@ public class Client {
 
         this.locationOnTheServer = ServerManager.getFTPServer().getServerBaseDirectory();
         this.commandListenerThread = new CommandListenerThread(socket, locationOnTheServer);
-        this.commandListenerThread.start();
+        this.commandListenerThread.startThread();
     }
 
     public String locationOnTheServer() { return this.locationOnTheServer; }
@@ -33,5 +35,16 @@ public class Client {
 
     public Socket clientSocket() {
         return this.socket;
+    }
+
+    public void disconnectClient() {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        AbstractLogger.log("Déconnexion du client " + username);
+        commandListenerThread.stopThread();
     }
 }

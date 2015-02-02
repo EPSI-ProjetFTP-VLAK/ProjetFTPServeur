@@ -13,9 +13,12 @@ public class MasterCommand implements ICommand {
 
     protected CommandData commandData;
 
+    protected boolean isExecuted;
+
     public MasterCommand(CommandData p_commandData){
         this.clientSocket = p_commandData.clientSocket();
         this.commandData = p_commandData;
+        this.isExecuted = false;
 
         inializeFiles();
     }
@@ -43,7 +46,7 @@ public class MasterCommand implements ICommand {
     }
 
     public boolean thereIsAtLeastOneParameter(){
-        return !this.commandData.commandParameter().trim().equals("");
+        return this.commandData.commandParameter().split("::--::").length >= 1;
     }
 
     public boolean thereIsAtLeastTwoParameter(){
@@ -71,6 +74,11 @@ public class MasterCommand implements ICommand {
     }
 
     @Override
+    public boolean isExecuted(){
+        return isExecuted;
+    }
+
+    @Override
     public void setSourceFile(String sourcePath){
         sourceDirectory = new File(sourcePath);
     }
@@ -80,9 +88,15 @@ public class MasterCommand implements ICommand {
         destinationDirectory = new File(sourcePath);
     }
 
-    public File destinationDirectory(){ return this.destinationDirectory; }
+    public File destinationDirectory(){
+        return this.destinationDirectory;
+    }
 
     public File sourceDirectory(){
         return sourceDirectory;
+    }
+
+    public Socket clientSocket(){
+        return clientSocket;
     }
 }

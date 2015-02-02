@@ -1,5 +1,6 @@
 package fr.epsi.server.core;
 
+import fr.epsi.server.client.Client;
 import fr.epsi.utils.AbstractLogger;
 import fr.epsi.utils.ThreadMaster;
 
@@ -35,7 +36,6 @@ public class ServerManager extends ThreadMaster{
     }
 
     private void loadServer() {
-        System.out.println("Loading Server...");
         FTPServer = new Server();
     }
 
@@ -44,6 +44,12 @@ public class ServerManager extends ThreadMaster{
         FTPServer.startServer();
     }
 
+    public void stopEverything(){
+        AbstractLogger.log("Extinstion du serveur");
+        stop = true;
+        stopServer();
+        this.interrupt();
+    }
     private void stopServer() {
         FTPServer.stopServer();
     }
@@ -53,6 +59,13 @@ public class ServerManager extends ThreadMaster{
     }
 
     public void displayClients(){
+        AbstractLogger.log("theres is actually " + getFTPServer().getClients().size() + " clients on the server :");
+
+        int i =0;
+
+        for(Client client : getFTPServer().getClients()){
+            AbstractLogger.log(++i + " - " + client.username() + " connection time : " + client.connectionTime());
+        }
         System.out.println(getFTPServer().getClients().toString());
     }
 }

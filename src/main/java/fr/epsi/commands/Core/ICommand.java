@@ -14,4 +14,5 @@ public interface ICommand {
 
     public String clientLocationAfterCommandExectution();
     public CommandData commandData();
+    public boolean isExecuted();
 }

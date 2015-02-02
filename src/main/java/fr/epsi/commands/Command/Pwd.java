@@ -9,6 +9,10 @@ public class Pwd extends MasterCommand{
     }
 
     @Override
+    public void execCommand(){
+        isExecuted = true;
+    }
+    @Override
     public String result(){
         return this.commandData().locationOfTheClientOnTheServer();
     }

@@ -1,6 +1,5 @@
 package fr.epsi.server.client;
 
-import fr.epsi.utils.XMLParser;
 import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -15,9 +14,11 @@ public class CommandListenerThreadTest{
     private Socket mockedClientSocket;
     private String testEnvironementPath;
     OutputStream mockedOutputStream;
+    private int delayInMsBeforeStopingListeningThread;
 
     @Before
     public void setUp() throws IOException {
+        delayInMsBeforeStopingListeningThread = 2500;
         String os = System.getProperty("os.name");
 
 
@@ -43,11 +44,9 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(1000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
 
-        /* + 1 for the ls return () */
         assertEquals(1, commandListenerThread.numberOfCommandCatch());
     }
 
@@ -59,10 +58,8 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(1000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
     }
@@ -90,14 +87,12 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
         assertTrue(src.exists());
         assertTrue(dst.exists());
-        assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
+        assertEquals(1 + 1, commandListenerThread.numberOfCommandCatch());
     }
 
     @Test
@@ -111,7 +106,7 @@ public class CommandListenerThreadTest{
         }
 
         if(new File(testEnvironementPath + "/test/testmv.txt").exists()){
-            new File(testEnvironementPath + "/testmv.txt/").delete();
+            new File(testEnvironementPath + "/test/testmv.txt/").delete();
         }
 
         InputStream InputStream = new ByteArrayInputStream("copy::--::test/testmv.txt::--::testmv.txt".getBytes(StandardCharsets.UTF_8));
@@ -119,14 +114,12 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
         assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
         assertTrue(new File(testEnvironementPath + "/test/testmv.txt").exists());
-        assertTrue(!new File(testEnvironementPath + "/testmv.txt").exists());
+        //assertTrue(!new File(testEnvironementPath + "/testmv.txt").exists());
     }
 
     @Test
@@ -137,12 +130,10 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
-        //assertEquals(commandListenerThread.locationOfTheClientOnTheServer(), testEnvironementPath);
+        assertEquals(commandListenerThread.locationOfTheClientOnTheServer(), testEnvironementPath);
         assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
     }
 
@@ -154,12 +145,10 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
-        //assertEquals(commandListenerThread.locationOfTheClientOnTheServer(), testEnvironementPath+"\\test");
+        assertEquals(commandListenerThread.locationOfTheClientOnTheServer(), testEnvironementPath.replace("/", "\\")+"\\test");
         assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
     }
 
@@ -171,10 +160,8 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
     }
@@ -190,10 +177,8 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
         assertTrue(new File(testEnvironementPath + "\\testcopy\\").exists());
         assertEquals(1 + 1, commandListenerThread.numberOfCommandCatch());
@@ -210,10 +195,8 @@ public class CommandListenerThreadTest{
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         commandListenerThread.startThread();
-        Thread.sleep(3000);
+        Thread.sleep(delayInMsBeforeStopingListeningThread);
         commandListenerThread.stopThread();
-        commandListenerThread.join();
-        commandListenerThread.interrupt();
 
         assertTrue(!new File(testEnvironementPath + "\\testrm.txt").exists());
         assertEquals(1 + 1, commandListenerThread.numberOfCommandCatch());

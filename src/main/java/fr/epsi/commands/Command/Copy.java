@@ -25,6 +25,8 @@ public class Copy extends MasterCommand {
 			fileCopied = Files.copy(sourceDirectory.toPath(), destinationDirectory.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally {
+			isExecuted = true;
 		}
 	}
 	

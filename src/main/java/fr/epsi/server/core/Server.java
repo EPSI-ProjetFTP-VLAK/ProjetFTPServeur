@@ -44,6 +44,7 @@ public class Server extends ThreadMaster{
     public void disconectAllPeers(){
         try {
             for (int i = 0; i < clients.size(); i++){
+                clients.get(i).disconnectClient();
                 clients.get(i).clientSocket().close();
                 clients.remove(i);
             }
@@ -70,14 +71,22 @@ public class Server extends ThreadMaster{
 
     public void stopServer() {
         AbstractLogger.log("Arrêt du serveur ...");
+
         try {
+            disconectAllPeers();
+            try {
+                listeningThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            listeningThread.interrupt();
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        listeningThread.interrupt();
-        this.interrupt();
-        disconectAllPeers();
+
+        this.stopThread();
+
         AbstractLogger.log("Serveur arrêté ...");
     }
 

@@ -1,6 +1,7 @@
 package fr.epsi.server.client;
 
 import fr.epsi.commands.Core.ICommand;
+import fr.epsi.utils.AbstractLogger;
 import fr.epsi.utils.ThreadMaster;
 
 import java.io.IOException;
@@ -10,17 +11,21 @@ import java.util.List;
 public class CommandResolver extends ThreadMaster{
     private List<ICommand> commandList;
     private String locationOfTheClientOnTheServer;
+    private boolean isWorking;
 
     public CommandResolver(){
+        isWorking = true;
         this.commandList = new ArrayList<ICommand>();
     }
 
     public void run(){
         while (!stop){
+            isWorking = true;
             if (thereIsCommandToExecute()){
                 executelastCatchedCommand();
                 commandList.remove(commandList.size() - 1);
             }
+            isWorking = false;
             waitNMilliseconds(500);
         }
     }
@@ -31,8 +36,17 @@ public class CommandResolver extends ThreadMaster{
 
     private void executelastCatchedCommand() {
         lastCommand().execCommand();
+        waitUntilCommandExecutionEnd();
         locationOfTheClientOnTheServer = lastCommand().clientLocationAfterCommandExectution();
         sendResultToClient();
+    }
+
+    private void waitUntilCommandExecutionEnd() {
+        while (!lastCommand().isExecuted()) try {
+                Thread.sleep(20);
+        } catch (InterruptedException e) {
+                e.printStackTrace();
+        }
     }
 
     private ICommand lastCommand() {
@@ -58,4 +72,6 @@ public class CommandResolver extends ThreadMaster{
     public String getLocationOfTheClientOnTheServerAfterCommandExecution() {
         return locationOfTheClientOnTheServer;
     }
+
+    public boolean isWorking() { return isWorking; }
 }

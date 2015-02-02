@@ -16,9 +16,13 @@ public class Mv extends MasterCommand {
 	
 	public void moveFileTo(){
 		try {
-			Files.move(sourceDirectory.toPath(),destinationDirectory.toPath());
+			if(sourceDirectory().exists() && !destinationDirectory().exists())
+				Files.move(sourceDirectory.toPath(),destinationDirectory.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		finally {
+			isExecuted = true;
 		}
 	}
 	@Override

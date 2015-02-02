@@ -12,7 +12,10 @@ public class Rm extends MasterCommand {
 
 	@Override
 	public void execCommand(){
-		destinationDirectory.delete();
+		if(destinationDirectory().exists())
+			destinationDirectory.delete();
+
+		isExecuted = true;
 	}
 
 	@Override

@@ -5,11 +5,13 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import fr.epsi.utils.AbstractLogger;
 import fr.epsi.utils.ThreadMaster;
 
 public class ListeningThread extends ThreadMaster {
 
     private ServerSocket serverSocket;
+    boolean exceptionCatch;
 
     public ListeningThread(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -17,24 +19,37 @@ public class ListeningThread extends ThreadMaster {
 
     @Override
     public void run() {
-        while (!serverSocket.isClosed()) {
+        exceptionCatch = false;
+        while (!serverSocket.isClosed() && !exceptionCatch) {
+            String logToDisplay = "fermeture de la socket serveur en cours\n";
+
             try {
-                Socket clientSocket = serverSocket.accept();
+                 Socket clientSocket = serverSocket.accept();
                 sendAcceptationMessage(clientSocket);
 
                 AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
                 authenticationThread.startThread();
             } catch (IOException e) {
+                exceptionCatch=false;
                 e.printStackTrace();
+
+            }finally {
+                logToDisplay = "socket serveur fermé !\n";
             }
+
+            AbstractLogger.log(logToDisplay);
         }
+
+
     }
 
     private void sendAcceptationMessage(Socket clientSocket) {
         try {
-            PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
-            clientSocketOutput.println("Hello world !");
-            clientSocketOutput.flush();
+            if(clientSocket.getOutputStream() != null){
+                PrintWriter clientSocketOutput = new PrintWriter(clientSocket.getOutputStream());
+                clientSocketOutput.println("Hello world !");
+                clientSocketOutput.flush();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

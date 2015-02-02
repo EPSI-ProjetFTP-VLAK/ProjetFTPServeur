@@ -11,6 +11,7 @@ public class Cd extends MasterCommand{
     @Override
     public void execCommand(){
         this.commandData().setLocationOfTheClientOnTheServer(this.destinationDirectory.toString());
+        isExecuted = true;
     }
 
     @Override
