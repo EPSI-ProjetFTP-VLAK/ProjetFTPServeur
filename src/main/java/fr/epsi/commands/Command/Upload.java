@@ -27,7 +27,7 @@ public class Upload extends MasterCommand{
     @Override
     public void execCommand(){
         AbstractLogger.log("Upload commande en cours");
-        FileOutputStream fout= null;
+        FileInputStream fin= null;
 
         if(destinationDirectory.exists()){
             destinationDirectory.delete();
@@ -40,21 +40,20 @@ public class Upload extends MasterCommand{
         }
 
         if(socketIsAvailable()) {
-
             try {
-                fout = new FileOutputStream(destinationDirectory);
+                fin = new FileInputStream(destinationDirectory);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
 
             try {
-                IOUtils.copy(clientSocket().getInputStream(),fout);
+                IOUtils.copy(fin, clientSocket().getOutputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
-                fout.close();
+                fin.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

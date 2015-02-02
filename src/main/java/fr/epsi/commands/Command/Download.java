@@ -25,23 +25,23 @@ public class Download extends MasterCommand{
     public void execCommand(){
         AbstractLogger.log("Transfert entrant en cours");
         if(destinationDirectory().exists()){
-            FileInputStream fin= null;
+            FileOutputStream fout= null;
             AbstractLogger.log("envoi du fichier " + destinationDirectory().toString() + " en cours");
 
             try {
-                fin = new FileInputStream(destinationDirectory);
+                fout = new FileOutputStream(destinationDirectory);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
 
             try {
-                IOUtils.copy(fin, clientSocket().getOutputStream());
+                IOUtils.copy(clientSocket().getInputStream(),fout);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
-                fin.close();
+                fout.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
