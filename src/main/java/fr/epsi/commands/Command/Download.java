@@ -33,39 +33,35 @@ public class Download extends MasterCommand{
         }
 
         System.out.println("début de la récéption");
-        FileInputStream fin = null;
-
         try {
-            System.out.println("srv - recherche du fichier");
-            try {
-                fin = new FileInputStream(destinationDirectory);
-            }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
+            byte[] b = new byte[1024];
+            int len = 0;
+            int bytcount = 1024;
+            FileOutputStream inFile = null;
+
+                inFile = new FileOutputStream(destinationDirectory);
+
+
+            InputStream is = clientSocket.getInputStream();
+            BufferedInputStream in2 = new BufferedInputStream(is, 1024);
+            while ((len = in2.read(b, 0, 1024)) != -1) {
+                System.out.println("Init writting");
+                bytcount = bytcount + 1024;
+                inFile.write(b, 0, len);
+                System.out.println("Bytes Writen : " + bytcount);
             }
 
-            System.out.println("srv -  fichier trouvé");
 
-            int ch;
-            String temp;
+            // Sending the response back to the client.
+            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+            oos.flush();
+            System.out.println("Transfert fini ;)");
 
-            System.out.println("srv - début de la récéption");
-            do {
-                temp = din.readUTF();
-                ch = Integer.parseInt(temp);
-                if (ch != -1) {
-                    dout.write(ch);
-                }
-            }
-            while (ch != -1);
-            System.out.println("srv - Récéption terminé !");
-            if(fin != null)
-                fin.close();
-        }  catch (IOException e) {
+            in2.close();
+            inFile.close();
+        } catch (IOException e) {
             e.printStackTrace();
-            isExecuted = true;
         }
-
         isExecuted = true;
     }
 

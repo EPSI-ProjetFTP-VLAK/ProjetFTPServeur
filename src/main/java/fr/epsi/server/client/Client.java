@@ -9,9 +9,13 @@ import java.net.Socket;
 public class Client {
     private String username;
     private Socket socket;
+    private Socket socketUpload;
+    private Socket socketDownload;
     private DateTime connectionTime;
     private String locationOnTheServer;
     private CommandListenerThread commandListenerThread;
+    private ListenerUpload uploadListenerThread;
+    private ListenerDownload downloadListenerThread;
 
     public Client(String username, Socket socket) {
         this.username = username;
@@ -22,8 +26,6 @@ public class Client {
         this.commandListenerThread = new CommandListenerThread(socket, locationOnTheServer);
         this.commandListenerThread.startThread();
     }
-
-    public String locationOnTheServer() { return this.locationOnTheServer; }
 
     public String username(){
         return this.username;
@@ -39,12 +41,31 @@ public class Client {
 
     public void disconnectClient() {
         try {
+            this.socket.shutdownOutput();
             this.socket.close();
+            this.socketDownload.shutdownOutput();
+            this.socketDownload.close();
+            this.socketUpload.shutdownOutput();
+            this.socketUpload.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         AbstractLogger.log("Déconnexion du client " + username);
         commandListenerThread.stopThread();
+        uploadListenerThread.stopThread();
+        downloadListenerThread.stopThread();
+    }
+
+    public void clientSetUploadThread(Socket clientSocket) {
+        socketUpload = clientSocket;
+        uploadListenerThread = new ListenerUpload(socketUpload, locationOnTheServer);
+        uploadListenerThread.startThread();
+    }
+
+    public void clientSetDownloadThread(Socket Socket) {
+        socketDownload = Socket;
+        downloadListenerThread = new ListenerDownload(socketDownload, locationOnTheServer);
+        downloadListenerThread.startThread();
     }
 }

@@ -27,6 +27,8 @@ public class ServerManager extends ThreadMaster{
             stopServer();
         } else if (command.toLowerCase().equals("load")){
             loadServer();
+        } else if (command.toLowerCase().equals("kick")){
+            FTPServer.disconectAllPeers();
         } else if (command.toLowerCase().equals("exit")){
             stopServer();
             stop = true;
@@ -66,6 +68,5 @@ public class ServerManager extends ThreadMaster{
         for(Client client : getFTPServer().getClients()){
             AbstractLogger.log(++i + " - " + client.username() + " connection time : " + client.connectionTime());
         }
-        System.out.println(getFTPServer().getClients().toString());
     }
 }

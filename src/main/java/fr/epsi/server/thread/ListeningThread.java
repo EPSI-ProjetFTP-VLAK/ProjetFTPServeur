@@ -9,7 +9,6 @@ import fr.epsi.utils.AbstractLogger;
 import fr.epsi.utils.ThreadMaster;
 
 public class ListeningThread extends ThreadMaster {
-
     private ServerSocket serverSocket;
     boolean exceptionCatch;
 
@@ -20,9 +19,8 @@ public class ListeningThread extends ThreadMaster {
     @Override
     public void run() {
         exceptionCatch = false;
-        while (!serverSocket.isClosed() && !exceptionCatch) {
-            String logToDisplay = "fermeture de la socket serveur en cours\n";
 
+        while (!serverSocket.isClosed() && !exceptionCatch) {
             try {
                  Socket clientSocket = serverSocket.accept();
                 sendAcceptationMessage(clientSocket);
@@ -30,17 +28,13 @@ public class ListeningThread extends ThreadMaster {
                 AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
                 authenticationThread.startThread();
             } catch (IOException e) {
-                exceptionCatch=false;
+                exceptionCatch=true;
                 e.printStackTrace();
-
             }finally {
-                logToDisplay = "socket serveur fermé !\n";
+                String logToDisplay = "socket serveur fermé !\n";
+                AbstractLogger.log(logToDisplay);
             }
-
-            AbstractLogger.log(logToDisplay);
         }
-
-
     }
 
     private void sendAcceptationMessage(Socket clientSocket) {

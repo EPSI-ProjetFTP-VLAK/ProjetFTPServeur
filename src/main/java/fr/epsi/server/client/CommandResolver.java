@@ -35,7 +35,11 @@ public class CommandResolver extends ThreadMaster{
     }
 
     private void executelastCatchedCommand() {
-        lastCommand().execCommand();
+        try {
+            lastCommand().execCommand();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         waitUntilCommandExecutionEnd();
         locationOfTheClientOnTheServer = lastCommand().clientLocationAfterCommandExectution();
         sendResultToClient();

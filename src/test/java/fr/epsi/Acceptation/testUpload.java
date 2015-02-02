@@ -1,4 +1,4 @@
-package fr.epsi.Acceptation;
+/*package fr.epsi.Acceptation;
 
 import java.io.*;
 import java.net.Socket;
@@ -77,6 +77,38 @@ public class testUpload {
 
     @Test
     public void  clientCanUpload(){
+        String datas= "";
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(din));
+            datas = bufferedReader.readLine();
+            System.out.println(datas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(din));
+            datas = bufferedReader.readLine();
+            System.out.println(datas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        out.println("pwd::--::");
+        out.flush();
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(din));
+            datas = bufferedReader.readLine();
+            System.out.println(datas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
         out.println("up::--::testUpload.txt");
         out.flush();
 
@@ -204,7 +236,7 @@ public class testUpload {
             e.printStackTrace();
         }
         System.out.println("fermeture du serveur");
-        serverManager.stopEverything();*/
+        serverManager.stopEverything();
     }
 
     @After
@@ -220,4 +252,4 @@ public class testUpload {
 
 
 
-}
+}*/

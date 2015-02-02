@@ -1,7 +1,9 @@
 package fr.epsi.server.core;
 
 import fr.epsi.server.client.Client;
+import fr.epsi.server.thread.ListeningDownloadThread;
 import fr.epsi.server.thread.ListeningThread;
+import fr.epsi.server.thread.ListeningUploadThread;
 import fr.epsi.utils.AbstractLogger;
 import fr.epsi.utils.ThreadMaster;
 
@@ -13,7 +15,11 @@ import java.util.List;
 public class Server extends ThreadMaster{
     private ServerConfiguration serverConfiguration;
     private ServerSocket serverSocket;
+    private ServerSocket serverSocketUpload;
+    private ServerSocket serverSocketDownload;
     private Thread listeningThread;
+    private ListeningUploadThread listenerUpload;
+    private ListeningDownloadThread listenerDownload;
     private List<Client> clients;
 
     public Server() {
@@ -23,6 +29,9 @@ public class Server extends ThreadMaster{
         createServerSocket();
 
         listeningThread = new ListeningThread(serverSocket);
+        listenerDownload = new ListeningDownloadThread(serverSocketDownload);
+        listenerUpload = new ListeningUploadThread(serverSocketUpload);
+
         clients = new ArrayList<Client>();
     }
 
@@ -55,6 +64,9 @@ public class Server extends ThreadMaster{
 
     public void startServer() {
         listeningThread.start();
+        listenerDownload.startThread();
+        listenerUpload.startThread();
+
         this.startThread();
         AbstractLogger.log("Serveur démmaré ...");
     }
@@ -63,7 +75,10 @@ public class Server extends ThreadMaster{
         AbstractLogger.log("Initialisation de la socket d'écoute ...");
 
         try {
-            serverSocket = new ServerSocket(serverConfiguration.serverPort());
+            int realPort = serverConfiguration.serverPort();
+            serverSocket = new ServerSocket(realPort);
+            serverSocketUpload = new ServerSocket(realPort + 1);
+            serverSocketDownload = new ServerSocket(realPort + 2);
         } catch (IOException e) {
             e.printStackTrace();
         }

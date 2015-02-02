@@ -1,7 +1,5 @@
 package fr.epsi.commands.Core;
 
-import fr.epsi.commands.DTO.FileDTO;
-
 import java.io.*;
 import java.net.Socket;
 
@@ -54,7 +52,7 @@ public class MasterCommand implements ICommand {
     }
 
     @Override
-    public void execCommand() {
+    public void execCommand() throws IOException {
     }
 
     @Override

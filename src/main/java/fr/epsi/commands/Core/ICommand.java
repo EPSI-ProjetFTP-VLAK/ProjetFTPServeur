@@ -3,7 +3,7 @@ package fr.epsi.commands.Core;
 import java.io.IOException;
 
 public interface ICommand {
-    public void execCommand();
+    public void execCommand() throws IOException;
 
     public void setDesinationFile(String sourcePath);
     public void setSourceFile(String sourcePath);

@@ -25,10 +25,10 @@ public class Upload extends MasterCommand{
 
     @Override
     public void execCommand(){
-        AbstractLogger.log("Transfert entrant en cours");
+        AbstractLogger.log("Upload commande en cours");
         FileOutputStream fout= null;
 
-        if(destinationDirectory.exists()){
+        /*if(destinationDirectory.exists()){
             destinationDirectory.delete();
         }
 
@@ -36,7 +36,7 @@ public class Upload extends MasterCommand{
             destinationDirectory.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         if(socketIsAvailable()) {
 
@@ -67,6 +67,8 @@ public class Upload extends MasterCommand{
                 e.printStackTrace();
             }
         }
+
+        System.out.println("Transfert terminé !");
 
         isExecuted = true;
     }

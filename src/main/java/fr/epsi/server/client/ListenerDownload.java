@@ -12,14 +12,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.List;
 
-public class  CommandListenerThread extends ThreadMaster{
+public class  ListenerDownload extends ThreadMaster{
     private Socket clientSocket;
     private CommandResolver commandResolver;
     private int numberOfCommandCatch;
     private String locationOfTheClientOnTheServer;
     private CommandData commandToCheck;
 
-    public CommandListenerThread(Socket socket, String locationOfTheClientOnTheServer){
+    public ListenerDownload(Socket socket, String locationOfTheClientOnTheServer){
         this.clientSocket = socket;
         this.commandResolver = new CommandResolver();
         this.numberOfCommandCatch = 0;
@@ -36,8 +36,7 @@ public class  CommandListenerThread extends ThreadMaster{
             readDataFromSocket();
 
             if(isNewCommandCatch()){
-                  sendCommandToExecution();
-                //addNewLs();
+                sendCommandToExecution();
             }
 
             waitNMilliseconds(500);

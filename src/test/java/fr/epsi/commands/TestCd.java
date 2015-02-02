@@ -34,6 +34,7 @@ public class TestCd {
         Mockito.doReturn(mockedOutputStream).when(mockedClientSocket).getOutputStream();
 
         commandListenerThread = new CommandListenerThread(mockedClientSocket, urlTestDirectory);
+        commandListenerThread.startThread();
     }
 
     @Test
@@ -41,12 +42,9 @@ public class TestCd {
         assertEquals(0, commandListenerThread.numberOfCommandCatch());
 
         try {
-            commandListenerThread.startThread();
             Thread.sleep(1000);
             commandListenerThread.stopThread();
             commandListenerThread.join();
-
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -55,7 +53,6 @@ public class TestCd {
         ConfigOS os = new ConfigOS();
         String urlTestDirectory = os.getUrlEnv(testDirectory);
 
-        commandListenerThread.locationOfTheClientOnTheServer();
         assertEquals(commandListenerThread.locationOfTheClientOnTheServer().replace("\\", "/"), urlTestDirectory + "/testCd");
         assertEquals(1+1, commandListenerThread.numberOfCommandCatch());
         commandListenerThread.stopThread();
