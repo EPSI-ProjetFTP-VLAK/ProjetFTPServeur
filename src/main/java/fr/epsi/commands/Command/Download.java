@@ -3,6 +3,7 @@ package fr.epsi.commands.Command;
 import fr.epsi.commands.Core.CommandData;
 import fr.epsi.commands.Core.MasterCommand;
 import fr.epsi.utils.AbstractLogger;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 
@@ -24,44 +25,30 @@ public class Download extends MasterCommand{
     public void execCommand(){
         AbstractLogger.log("Transfert entrant en cours");
         if(destinationDirectory().exists()){
+            FileInputStream fin= null;
+            AbstractLogger.log("envoi du fichier " + destinationDirectory().toString() + " en cours");
+
             try {
-                destinationDirectory().delete();
-                destinationDirectory().createNewFile();
+                fin = new FileInputStream(destinationDirectory);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                IOUtils.copy(fin, clientSocket().getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                fin.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        System.out.println("début de la récéption");
-        try {
-            byte[] b = new byte[1024];
-            int len = 0;
-            int bytcount = 1024;
-            FileOutputStream inFile = null;
-
-                inFile = new FileOutputStream(destinationDirectory);
 
 
-            InputStream is = clientSocket.getInputStream();
-            BufferedInputStream in2 = new BufferedInputStream(is, 1024);
-            while ((len = in2.read(b, 0, 1024)) != -1) {
-                System.out.println("Init writting");
-                bytcount = bytcount + 1024;
-                inFile.write(b, 0, len);
-                System.out.println("Bytes Writen : " + bytcount);
-            }
-
-
-            // Sending the response back to the client.
-            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-            oos.flush();
-            System.out.println("Transfert fini ;)");
-
-            in2.close();
-            inFile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         isExecuted = true;
     }
 

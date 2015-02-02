@@ -61,11 +61,14 @@ public class Client {
         socketUpload = clientSocket;
         uploadListenerThread = new ListenerUpload(socketUpload, locationOnTheServer);
         uploadListenerThread.startThread();
+
+        System.out.println("Thread upload démmaré socket upload connecté");
     }
 
     public void clientSetDownloadThread(Socket Socket) {
         socketDownload = Socket;
         downloadListenerThread = new ListenerDownload(socketDownload, locationOnTheServer);
         downloadListenerThread.startThread();
+        System.out.println("Thread download démmaré socket download connecté");
     }
 }

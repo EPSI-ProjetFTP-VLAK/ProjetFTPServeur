@@ -24,20 +24,34 @@ public class ListeningUploadThread extends ThreadMaster {
         while (!serverSocket.isClosed() && !exceptionCatch) {
             try {
                 Socket clientSocket = serverSocket.accept();
-
-                for (Client client : ServerManager.getFTPServer().getClients()){
-                    if(client.clientSocket().getInetAddress().getHostAddress().equals(clientSocket.getInetAddress().getHostAddress())){
-                        client.clientSetUploadThread(clientSocket);
-                    }
-                }
-
+                attributeSocketToTheCorrectClient(clientSocket);
             } catch (IOException e) {
                 exceptionCatch=true;
                 e.printStackTrace();
             }finally {
-                String logToDisplay = "socket serveur fermé !\n";
-                AbstractLogger.log(logToDisplay);
+                if(exceptionCatch)
+                    AbstractLogger.log("socket serveur fermé !\n");
             }
         }
+    }
+
+    private void attributeSocketToTheCorrectClient(Socket clientSocket) {
+        boolean correspondanceMatch = false;
+        for (Client client : ServerManager.getFTPServer().getClients()){
+            if(socketsIPcorrespondingToClient(clientSocket, client)){
+                client.clientSetUploadThread(clientSocket);
+                correspondanceMatch = true;
+            }
+        }
+
+        if(correspondanceMatch){
+            AbstractLogger.log("Connexion Entrante : nouvelle hôte " + clientSocket.getInetAddress().getHostAddress());
+        }else{
+            AbstractLogger.log("Connexion Entrante : Aucune correspondance trouvé pour l'hôte " + clientSocket.getInetAddress().getHostAddress() + " fermeture du fluxs");
+        }
+    }
+
+    private boolean socketsIPcorrespondingToClient(Socket clientSocket, Client client) {
+        return client.clientSocket().getInetAddress().getHostAddress().equals(clientSocket.getInetAddress().getHostAddress());
     }
 }

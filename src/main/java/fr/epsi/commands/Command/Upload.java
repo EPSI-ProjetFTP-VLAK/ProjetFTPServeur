@@ -3,6 +3,7 @@ package fr.epsi.commands.Command;
 import fr.epsi.commands.Core.CommandData;
 import fr.epsi.commands.Core.MasterCommand;
 import fr.epsi.utils.AbstractLogger;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 
@@ -28,7 +29,7 @@ public class Upload extends MasterCommand{
         AbstractLogger.log("Upload commande en cours");
         FileOutputStream fout= null;
 
-        /*if(destinationDirectory.exists()){
+        if(destinationDirectory.exists()){
             destinationDirectory.delete();
         }
 
@@ -36,7 +37,7 @@ public class Upload extends MasterCommand{
             destinationDirectory.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
         if(socketIsAvailable()) {
 
@@ -46,20 +47,11 @@ public class Upload extends MasterCommand{
                 e.printStackTrace();
             }
 
-            int ch = 0;
-            String temp;
-
-            do {
-                try {
-                    temp = din.readUTF();
-                    ch = Integer.parseInt(temp);
-                    if (ch != -1) {
-                        fout.write(ch);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } while (ch != -1);
+            try {
+                IOUtils.copy(clientSocket().getInputStream(),fout);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             try {
                 fout.close();

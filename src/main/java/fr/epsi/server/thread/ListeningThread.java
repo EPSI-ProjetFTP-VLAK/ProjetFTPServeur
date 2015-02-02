@@ -22,19 +22,31 @@ public class ListeningThread extends ThreadMaster {
 
         while (!serverSocket.isClosed() && !exceptionCatch) {
             try {
-                 Socket clientSocket = serverSocket.accept();
-                sendAcceptationMessage(clientSocket);
-
-                AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
-                authenticationThread.startThread();
+                sendNewClientsToAuthentification();
             } catch (IOException e) {
                 exceptionCatch=true;
                 e.printStackTrace();
             }finally {
-                String logToDisplay = "socket serveur fermé !\n";
-                AbstractLogger.log(logToDisplay);
+                if(exceptionCatch)
+                    AbstractLogger.log("socket serveur fermé !\n");
             }
+
+            log();
         }
+    }
+
+    private void log() {
+
+    }
+
+    private void sendNewClientsToAuthentification() throws IOException {
+        Socket clientSocket = serverSocket.accept();
+        sendAcceptationMessage(clientSocket);
+
+        AuthenticationThread authenticationThread = new AuthenticationThread(clientSocket);
+        authenticationThread.startThread();
+
+        AbstractLogger.log("Connexion Principale : nouvelle hôte " + clientSocket.getInetAddress().getHostAddress());
     }
 
     private void sendAcceptationMessage(Socket clientSocket) {
