@@ -14,7 +14,7 @@ public class Download extends MasterCommand{
     public Download(CommandData p_commandData) {
         super(p_commandData);
         try {
-            fin = new FileInputStream(sourceDirectory);
+            fin = new FileInputStream(destinationDirectory);
             bout = new BufferedOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -23,25 +23,17 @@ public class Download extends MasterCommand{
 
     @Override
     public void execCommand(){
-        try {
-            destinationDirectory.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        destinationDirectory.setWritable(true, false);
         AbstractLogger.log("Transfert sortant en cours");
-        FileInputStream fin= null;
 
         try {
             byte[] buffer = new byte[4096];
             int count;
-            while ((count = fin.read(buffer)) >= 0) {
+            while ((count = fin.read(buffer)) != -1) {
                 bout.write(buffer, 0, count);
                 bout.flush();
             }
 
-            //fin.close();
-            bout.close();
+            fin.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
