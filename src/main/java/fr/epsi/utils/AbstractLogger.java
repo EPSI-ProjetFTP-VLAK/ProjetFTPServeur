@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public abstract class AbstractLogger {
 	
-	public static String fileLogs = "/home/k2r79/Desktop/logs.txt";
+	public static String fileLogs = "D:/FTPFolder/logs.txt";
 	
 	public static void writeLogInFile(String log){
 		

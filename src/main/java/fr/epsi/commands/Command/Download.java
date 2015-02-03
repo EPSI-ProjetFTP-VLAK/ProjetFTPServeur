@@ -23,18 +23,24 @@ public class Download extends MasterCommand{
 
     @Override
     public void execCommand(){
+        try {
+            destinationDirectory.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        destinationDirectory.setWritable(true, false);
         AbstractLogger.log("Transfert sortant en cours");
         FileInputStream fin= null;
 
         try {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096];
             int count;
             while ((count = fin.read(buffer)) >= 0) {
                 bout.write(buffer, 0, count);
                 bout.flush();
             }
 
-            fin.close();
+            //fin.close();
             bout.close();
         } catch (IOException e) {
             e.printStackTrace();

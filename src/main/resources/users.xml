@@ -2,4 +2,7 @@
 <users>
 	<user username="test" password="test" />
 	<user username="theo" password="theo" />
+    <user username="mailys" password="mailys" />
+    <user username="arthur" password="arthur" />
+    <user username="vincent" password="vincent" />
 </users>
