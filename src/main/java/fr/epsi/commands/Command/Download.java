@@ -8,14 +8,14 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 
 public class Download extends MasterCommand{
-    DataInputStream din;
-    DataOutputStream dout;
+    FileInputStream fin;
+    BufferedOutputStream bout;
 
     public Download(CommandData p_commandData) {
         super(p_commandData);
         try {
-            din=new DataInputStream(clientSocket.getInputStream());
-            dout=new DataOutputStream(clientSocket.getOutputStream());
+            fin = new FileInputStream(sourceDirectory);
+            bout = new BufferedOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,31 +23,22 @@ public class Download extends MasterCommand{
 
     @Override
     public void execCommand(){
-        AbstractLogger.log("Transfert entrant en cours");
-        if(destinationDirectory().exists()){
-            FileOutputStream fout= null;
-            AbstractLogger.log("envoi du fichier " + destinationDirectory().toString() + " en cours");
+        AbstractLogger.log("Transfert sortant en cours");
+        FileInputStream fin= null;
 
-            try {
-                fout = new FileOutputStream(destinationDirectory);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+        try {
+            byte[] buffer = new byte[1024];
+            int count;
+            while ((count = fin.read(buffer)) >= 0) {
+                bout.write(buffer, 0, count);
+                bout.flush();
             }
 
-            try {
-                IOUtils.copy(clientSocket().getInputStream(),fout);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                fout.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fin.close();
+            bout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-
 
         isExecuted = true;
     }

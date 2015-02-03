@@ -77,8 +77,8 @@ public class Server extends ThreadMaster{
         try {
             int realPort = serverConfiguration.serverPort();
             serverSocket = new ServerSocket(realPort);
-            serverSocketUpload = new ServerSocket(realPort + 1);
-            serverSocketDownload = new ServerSocket(realPort + 2);
+            serverSocketDownload = new ServerSocket(realPort + 1);
+            serverSocketUpload = new ServerSocket(realPort + 2);
         } catch (IOException e) {
             e.printStackTrace();
         }

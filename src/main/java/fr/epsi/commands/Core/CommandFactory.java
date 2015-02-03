@@ -22,9 +22,9 @@ public class CommandFactory {
         }else if(commandData.commandType().equals("pwd")){
             command = new Pwd(commandData);
         }else if(commandData.commandType().equals("down")){
-            command = new Upload(commandData);
-        }else if(commandData.commandType().equals("up")){
             command = new Download(commandData);
+        }else if(commandData.commandType().equals("up")){
+            command = new Upload(commandData);
         }else{
             command = new Error(commandData);
         }

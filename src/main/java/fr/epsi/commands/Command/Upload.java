@@ -8,16 +8,16 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 
 public class Upload extends MasterCommand{
-    DataInputStream din;
-    DataOutputStream dout;
+    BufferedInputStream bin;
+    FileOutputStream fout;
 
     public Upload(CommandData p_commandData) {
         super(p_commandData);
 
         try {
             if(socketIsAvailable()){
-                din=new DataInputStream(clientSocket.getInputStream());
-                dout=new DataOutputStream(clientSocket.getOutputStream());
+                bin = new BufferedInputStream(clientSocket.getInputStream());
+                fout = new FileOutputStream(destinationDirectory);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -26,37 +26,23 @@ public class Upload extends MasterCommand{
 
     @Override
     public void execCommand(){
-        AbstractLogger.log("Upload commande en cours");
-        FileInputStream fin= null;
 
-        if(destinationDirectory.exists()){
-            destinationDirectory.delete();
-        }
+        AbstractLogger.log("Transfert entrant en cours");
+        AbstractLogger.log("Réception du fichier " + destinationDirectory().toString() + " en cours");
 
         try {
-            destinationDirectory.createNewFile();
+            // IOUtils.copy(fin, fout);
+
+            byte[] buffer = new byte[1024];
+            int count;
+            while((count = bin.read(buffer)) >= 0){
+                fout.write(buffer);
+            }
+
+            bin.close();
+            fout.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        if(socketIsAvailable()) {
-            try {
-                fin = new FileInputStream(destinationDirectory);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                IOUtils.copy(fin, clientSocket().getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                fin.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         System.out.println("Transfert terminé !");
