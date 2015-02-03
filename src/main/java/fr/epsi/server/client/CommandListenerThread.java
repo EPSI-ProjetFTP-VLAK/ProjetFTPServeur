@@ -3,6 +3,7 @@ package fr.epsi.server.client;
 import fr.epsi.commands.Core.CommandData;
 import fr.epsi.commands.Core.CommandFactory;
 import fr.epsi.commands.Core.ICommand;
+import fr.epsi.utils.AbstractLogger;
 import fr.epsi.utils.ThreadMaster;
 
 import java.io.BufferedReader;
@@ -36,6 +37,7 @@ public class  CommandListenerThread extends ThreadMaster{
             readDataFromSocket();
 
             if(isNewCommandCatch()){
+                AbstractLogger.log("Connexion Principale : Traitement commande en cours");
                   sendCommandToExecution();
                 //addNewLs();
             }
