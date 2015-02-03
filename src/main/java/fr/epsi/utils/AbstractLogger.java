@@ -16,23 +16,23 @@ import java.util.Scanner;
 
 public abstract class AbstractLogger {
 	
-	public static String fileLogs = "/logs.txt";
+	public static String fileLogs = "/home/k2r79/Desktop/logs.txt";
 	
 	public static void writeLogInFile(String log){
 		
-		ConfigOS os = new ConfigOS();
-		try {
-			File file = new File(os.getUrl(fileLogs));
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(log);
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		ConfigOS os = new ConfigOS();
+//		try {
+//			File file = new File(os.getUrl(fileLogs));
+//			if (!file.exists()) {
+//				file.createNewFile();
+//			}
+//			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+//			BufferedWriter bw = new BufferedWriter(fw);
+//			bw.write(log);
+//			bw.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public static String readLogInFile(){

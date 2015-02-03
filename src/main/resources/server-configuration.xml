@@ -2,5 +2,5 @@
 <server>
 	<port>4200</port>
 	<timeout>3500</timeout>
-	<basedirectory>D:/FTPFolder</basedirectory>
+	<basedirectory>/tmp</basedirectory>
 </server>

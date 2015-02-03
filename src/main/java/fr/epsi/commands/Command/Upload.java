@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 
 public class Upload extends MasterCommand{
-    DataInputStream bin;
+    BufferedInputStream bin;
     FileOutputStream fout;
 
     public Upload(CommandData p_commandData) {
@@ -16,7 +16,7 @@ public class Upload extends MasterCommand{
 
         try {
             if(socketIsAvailable()){
-                bin = new DataInputStream(clientSocket.getInputStream());
+                bin = new BufferedInputStream(clientSocket.getInputStream());
                 fout = new FileOutputStream(destinationDirectory);
             }
         } catch (IOException e) {
@@ -26,26 +26,19 @@ public class Upload extends MasterCommand{
 
     @Override
     public void execCommand(){
-        if(destinationDirectory().exists()){
-            destinationDirectory().delete();
-        }
-
-        try {
-            destinationDirectory().createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         AbstractLogger.log("Transfert entrant en cours");
         AbstractLogger.log("Réception du fichier " + destinationDirectory().toString() + " en cours");
 
         try {
-            IOUtils.copy(bin, fout);
+            destinationDirectory.createNewFile();
+            destinationDirectory.setWritable(true, false);
 
-            /*byte[] buffer = new byte[1024];
+            // IOUtils.copy(bin, fout);
+
+            byte[] buffer = new byte[4096];
             int count;
-            while((count = bin.read(buffer)) >= 0){
-                fout.write(buffer);
+            while((count = bin.read(buffer)) != -1){
+                fout.write(buffer, 0, count);
             }
 
             //bin.close();*/
@@ -57,8 +50,6 @@ public class Upload extends MasterCommand{
         System.out.println("Transfert terminé !");
 
         isExecuted = true;
-
-        boolean test=clientSocket.isClosed();
     }
 
     @Override
